@@ -11,10 +11,16 @@ def find_contoured_centroid(mask):
     center = None
 
     if len(cnts) > 0:
-        contour = max(cnts, key = cv2.contourArea)
-        moments = cv2.moments(contour)
+        ordered_cnts = sorted(cnts, key = cv2.contourArea)
+        first = ordered_cnts[-1]
+        second = ordered_cnts[-2]
+        moments1 = cv2.moments(first)
+        moments2 = cv2.moments(second)
 
-        center = (int(moments["m10"] / moments["m00"]), int(moments["m01"] / moments["m00"]))
+        center1 = (int(moments1["m10"] / moments1["m00"]), int(moments1["m01"] / moments1["m00"]))
+        center2 = (int(moments2["m10"] / moments2["m00"]), int(moments2["m01"] / moments2["m00"]))
+
+        center = ((center1[0] + center2[0]) / 2, (center1[1] + center2[1]) / 2)
 
     return center
 
