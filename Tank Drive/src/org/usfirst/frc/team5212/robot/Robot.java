@@ -8,20 +8,17 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 public class Robot extends IterativeRobot {
 
 	/* talons for arcade drive */
-	WPI_TalonSRX _frontLeftMotor = new WPI_TalonSRX(2);
-	WPI_TalonSRX _frontRightMotor = new WPI_TalonSRX(0);
+	WPI_TalonSRX frontLeftMotor = new WPI_TalonSRX(2);
+	WPI_TalonSRX frontRightMotor = new WPI_TalonSRX(0);
 
 	/* extra talons and victors for six motor drives */
 	
-	WPI_TalonSRX _leftSlave = new WPI_TalonSRX(3);
-	WPI_TalonSRX _rightSlave = new WPI_TalonSRX(1);
+	WPI_TalonSRX leftSlave = new WPI_TalonSRX(3);
+	WPI_TalonSRX rightSlave = new WPI_TalonSRX(1);
 
-	
-	DifferentialDrive _drive = new DifferentialDrive(_frontLeftMotor, _frontRightMotor);
+	DifferentialDrive drive = new DifferentialDrive(frontLeftMotor, frontRightMotor);
 
-	Joystick _joy = new Joystick(0);
-	
-	
+	Joystick joy = new Joystick(0);
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -32,17 +29,17 @@ public class Robot extends IterativeRobot {
 		 * take our extra talons and just have them follow the Talons updated in
 		 * arcadeDrive
 		 */
-		_leftSlave.follow(_frontLeftMotor);
-		_rightSlave.follow(_frontRightMotor);
+		leftSlave.follow(frontLeftMotor);
+		rightSlave.follow(frontRightMotor);
 
 		/* drive robot forward and make sure all 
 		 * motors spin the correct way.
 		 * Toggle booleans accordingly.... */
-		_frontLeftMotor.setInverted(false);
-		_leftSlave.setInverted(false);
+		frontLeftMotor.setInverted(false);
+		leftSlave.setInverted(false);
 		
-		_frontRightMotor.setInverted(false);
-		_rightSlave.setInverted(false);
+		frontRightMotor.setInverted(false);
+		rightSlave.setInverted(false);
 	}
 
 	/**
@@ -68,7 +65,10 @@ public class Robot extends IterativeRobot {
 		/* drive the robot, when driving forward one side will be red.  
 		 * This is because DifferentialDrive assumes 
 		 * one side must be negative */
-		System.out.println("Joy0Y:" + _joy.getRawAxis(1) + "Joy1Y:" + _joy.getRawAxis(3));
-		_drive.tankDrive(-1*_joy.getRawAxis(1), -1*_joy.getRawAxis(3));
+		
+		System.out.println("Joy0Y:" + joy.getRawAxis(1) + "Joy1Y:" + joy.getRawAxis(3));
+		
+		drive.tankDrive(-1 * joy.getRawAxis(1), -1 * joy.getRawAxis(3));
+		
 	}
 }
