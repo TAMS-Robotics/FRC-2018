@@ -19,6 +19,9 @@ public class Robot extends IterativeRobot {
 	DifferentialDrive drive = new DifferentialDrive(frontLeftMotor, frontRightMotor);
 
 	Joystick joy = new Joystick(0);
+	
+	//speed of robot [0-1]
+	double speed = .8;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -68,7 +71,7 @@ public class Robot extends IterativeRobot {
 		
 		System.out.println("Joy0Y:" + joy.getRawAxis(1) + "Joy1Y:" + joy.getRawAxis(3));
 		
-		drive.tankDrive(-1 * joy.getRawAxis(1), -1 * joy.getRawAxis(3));
+		drive.tankDrive(-(1) * (speed)*joy.getRawAxis(1), -(1) * (speed)*joy.getRawAxis(3));
 		
 	}
 }
