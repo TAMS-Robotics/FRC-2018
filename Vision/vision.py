@@ -12,8 +12,8 @@ def find_contoured_centroid(mask):
 
     if len(cnts) > 0:
         ordered_cnts = sorted(cnts, key = cv2.contourArea)
-        first = ordered_cnts[-1]
-        second = ordered_cnts[-2]
+        first = ordered_cnts[len(ordered_cnts) - 1]
+        second = ordered_cnts[len(ordered_cnts) - 2]
         moments1 = cv2.moments(first)
         moments2 = cv2.moments(second)
 
@@ -34,7 +34,12 @@ def erode_dilate_mask(frame):
 
     return eroded_dilated
 
-def pixel2degrees((x, y), (res_x, res_y), diagonal_fov, camera_angle):
+def pixel2degrees(point, resolution, diagonal_fov, camera_angle):
+    x = point[0]
+    y = point[1]
+    res_x = resolution[0]
+    res_y = resolution[1]
+
     ptd = diagonal_fov / math.sqrt(math.pow(res_x, 2), math.pow(res_y, 2))
 
     angle_x = ((res_x / 2) - x) * ptd
@@ -46,7 +51,7 @@ if __name__ == '__main__':
     name = sys.argv[1]
     print(name)
     frame = cv2.imread(name, cv2.IMREAD_COLOR)
-
+    print(type(frame))
     mask = erode_dilate_mask(frame)
     center = find_contoured_centroid(mask)
 
