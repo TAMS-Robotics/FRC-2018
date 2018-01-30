@@ -1,0 +1,67 @@
+<grip:Pipeline>
+  <sources>
+    <grip:ImageFile>
+      <property name="path" value="/Users/vsong/Documents/Code/FRC-2018/Vision/tests/red_ball_test.jpeg"/>
+    </grip:ImageFile>
+  </sources>
+  <steps>
+    <grip:Step name="Filter Contours">
+      <grip:Input step="0" socket="0"/>
+      <grip:Input step="0" socket="1">
+        <value>0</value>
+      </grip:Input>
+      <grip:Input step="0" socket="2">
+        <value>0</value>
+      </grip:Input>
+      <grip:Input step="0" socket="3">
+        <value>0</value>
+      </grip:Input>
+      <grip:Input step="0" socket="4">
+        <value>1000</value>
+      </grip:Input>
+      <grip:Input step="0" socket="5">
+        <value>0</value>
+      </grip:Input>
+      <grip:Input step="0" socket="6">
+        <value>1000</value>
+      </grip:Input>
+      <grip:Input step="0" socket="7">
+        <value>
+          <int>0</int>
+          <int>100</int>
+        </value>
+      </grip:Input>
+      <grip:Input step="0" socket="8">
+        <value>1000000</value>
+      </grip:Input>
+      <grip:Input step="0" socket="9">
+        <value>0</value>
+      </grip:Input>
+      <grip:Input step="0" socket="10">
+        <value>0</value>
+      </grip:Input>
+      <grip:Input step="0" socket="11">
+        <value>1000</value>
+      </grip:Input>
+      <grip:Output step="0" socket="0" previewed="false"/>
+    </grip:Step>
+  </steps>
+  <connections/>
+  <settings>
+    <teamNumber>0</teamNumber>
+    <publishAddress>roboRIO-0-FRC.local</publishAddress>
+    <deployAddress>roboRIO-0-FRC.local</deployAddress>
+    <deployDir>/home/lvuser</deployDir>
+    <deployUser>lvuser</deployUser>
+    <deployJavaHome>/usr/local/frc/JRE/</deployJavaHome>
+    <deployJvmOptions>-Xmx50m -XX:-OmitStackTraceInFastThrow -XX:+HeapDumpOnOutOfMemoryError -XX:MaxNewSize=16m</deployJvmOptions>
+  </settings>
+  <codeGenerationSettings>
+    <language>Java</language>
+    <className>GripPipeline</className>
+    <implementWpilibPipeline>false</implementWpilibPipeline>
+    <saveDir>/Users/vsong/GRIP</saveDir>
+    <packageName></packageName>
+    <moduleName>grip</moduleName>
+  </codeGenerationSettings>
+</grip:Pipeline>
