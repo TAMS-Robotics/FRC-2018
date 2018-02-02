@@ -5,45 +5,37 @@
     </grip:ImageFile>
   </sources>
   <steps>
-    <grip:Step name="Filter Contours">
+    <grip:Step name="Blur">
       <grip:Input step="0" socket="0"/>
       <grip:Input step="0" socket="1">
-        <value>0</value>
+        <value>BOX</value>
       </grip:Input>
       <grip:Input step="0" socket="2">
-        <value>0</value>
+        <value>0.0</value>
       </grip:Input>
-      <grip:Input step="0" socket="3">
-        <value>0</value>
-      </grip:Input>
-      <grip:Input step="0" socket="4">
-        <value>1000</value>
-      </grip:Input>
-      <grip:Input step="0" socket="5">
-        <value>0</value>
-      </grip:Input>
-      <grip:Input step="0" socket="6">
-        <value>1000</value>
-      </grip:Input>
-      <grip:Input step="0" socket="7">
+      <grip:Output step="0" socket="0" previewed="true"/>
+    </grip:Step>
+    <grip:Step name="HSL Threshold">
+      <grip:Input step="1" socket="0"/>
+      <grip:Input step="1" socket="1">
         <value>
-          <int>0</int>
-          <int>100</int>
+          <double>0.0</double>
+          <double>180.0</double>
         </value>
       </grip:Input>
-      <grip:Input step="0" socket="8">
-        <value>1000000</value>
+      <grip:Input step="1" socket="2">
+        <value>
+          <double>0.0</double>
+          <double>255.0</double>
+        </value>
       </grip:Input>
-      <grip:Input step="0" socket="9">
-        <value>0</value>
+      <grip:Input step="1" socket="3">
+        <value>
+          <double>0.0</double>
+          <double>255.0</double>
+        </value>
       </grip:Input>
-      <grip:Input step="0" socket="10">
-        <value>0</value>
-      </grip:Input>
-      <grip:Input step="0" socket="11">
-        <value>1000</value>
-      </grip:Input>
-      <grip:Output step="0" socket="0" previewed="false"/>
+      <grip:Output step="1" socket="0" previewed="true"/>
     </grip:Step>
   </steps>
   <connections/>
