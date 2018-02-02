@@ -5,7 +5,7 @@ import time
 import sys
 sys.path.append("../")
 
-import vision as v
+import vision.py as v
 
 if __name__ == "__main__":
     start_time = time.time()
