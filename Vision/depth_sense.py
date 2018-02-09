@@ -6,7 +6,7 @@ from pyrealsense.constants import rs_option
 import time
 import pyximport; pyximport.install()
 
-import z16tobgr
+from z16tobgr import z16tobgr
 
 depth_fps = 90
 depth_stream =  pyrs.stream.DepthStream(fps = depth_fps)
