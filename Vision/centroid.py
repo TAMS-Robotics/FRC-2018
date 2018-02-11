@@ -25,7 +25,7 @@ def find_contoured_centroid(mask):
         first = ordered_cnts[len(ordered_cnts) - 1]
         second = ordered_cnts[len(ordered_cnts) - 2]
         x, y, w, h = cv2.boundingRect(first)
-        img = cv2.imread("tests/tape1.jpg", cv2.IMREAD_COLOR)
+        img = cv2.imread("tests/tape2.png", cv2.IMREAD_COLOR)
         thing = cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),2)
         cv2.imshow("test", thing)
         cv2.waitKey(0)
