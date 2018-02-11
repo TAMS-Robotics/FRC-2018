@@ -1,9 +1,12 @@
 package org.usfirst.frc.team5212.robot;
 
-import com.ctre.phoenix.motorcontrol.can.*;
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.drive.*;
+import edu.wpi.first.wpilibj.command.*;
 
 public class Robot extends IterativeRobot {
 
@@ -13,12 +16,24 @@ public class Robot extends IterativeRobot {
 
 	/* extra talons and victors for six motor drives */
 	
-	WPI_TalonSRX leftSlave = new WPI_TalonSRX(3);
-	WPI_TalonSRX rightSlave = new WPI_TalonSRX(1);
+	//WPI_TalonSRX leftSlave = new WPI_TalonSRX(3);
+	//WPI_TalonSRX rightSlave = new WPI_TalonSRX(1);
+	
+	//WPI_TalonSRX leftSecondSlave = new WPI_TalonSRX();
+	//WPI_TalonSRX rightSecondSlave = new WPI_TalonSRX();
 
 	DifferentialDrive drive = new DifferentialDrive(frontLeftMotor, frontRightMotor);
 
 	Joystick joy = new Joystick(0);
+	
+	
+	NetworkTable table;
+	NetworkTableInstance inst;
+
+	NetworkTableEntry leftRawData;
+	NetworkTableEntry rightRawData;
+	
+	final int DEFAULT_DRIVE = 0;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -29,17 +44,34 @@ public class Robot extends IterativeRobot {
 		 * take our extra talons and just have them follow the Talons updated in
 		 * arcadeDrive
 		 */
-		leftSlave.follow(frontLeftMotor);
-		rightSlave.follow(frontRightMotor);
+		//leftSlave.follow(frontLeftMotor);
+		//rightSlave.follow(frontRightMotor);
+		
+		
 
 		/* drive robot forward and make sure all 
 		 * motors spin the correct way.
 		 * Toggle booleans accordingly.... */
 		frontLeftMotor.setInverted(false);
-		leftSlave.setInverted(false);
+		//leftSlave.setInverted(false);
 		
 		frontRightMotor.setInverted(false);
-		rightSlave.setInverted(false);
+		//rightSlave.setInverted(false);
+		
+		table = inst.getTable("test");
+
+		System.out.println(table.getEntry("test"));
+		
+		//leftRawData = table.getEntry("left");
+		//rightRawData = table.getEntry("right");
+	}
+	
+	public void autonomousInit() {
+		
+	}
+	
+	public void autonomousPeriodic() {
+		
 	}
 
 	/**
@@ -70,5 +102,7 @@ public class Robot extends IterativeRobot {
 		
 		drive.tankDrive(-1 * joy.getRawAxis(1), -1 * joy.getRawAxis(3));
 		
+		//float leftVal = leftRawData.getNumber(DEFAULT_DRIVE).floatValue();
+		//float rightVal = rightRawData.getNumber(DEFAULT_DRIVE).floatValue();
 	}
 }
