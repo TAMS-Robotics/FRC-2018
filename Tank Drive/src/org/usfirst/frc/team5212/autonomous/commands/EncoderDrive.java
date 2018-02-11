@@ -2,22 +2,33 @@ package org.usfirst.frc.team5212.autonomous.commands;
 
 import java.awt.Robot;
 
+import org.usfirst.frc.team5212.autonomous.subsystems.DriveBase;
+
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class EncoderDrive extends Command {
-
+	
+	DriveBase drivebase;
+	double speedL;
+	double speedR;
 	public EncoderDrive() {
-		requires(null); // change this - we need to figure out what we need to call in requires
+		super("EncoderDrive");
+		requires(drivebase);
 	}
 	
 	// called once when this Command is initialized
 	protected void initialize() {
-		
+		speedL = 1;
+		speedR = 1;
 	}
 	
 	// called repeatedly in Autonomous mode
 	protected void execute() {
 		// TODO Auto-generated method stub
+		
+		
 	}
 
 	// returns true when method no longer needs to execute
