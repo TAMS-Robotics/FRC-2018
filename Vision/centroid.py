@@ -6,6 +6,7 @@ import sys
 import os
 import signal
 import time
+import math
 
 from networktables import NetworkTables
 
@@ -43,16 +44,19 @@ def erode_dilate_mask(frame):
 
     return eroded_dilated
 
+def dist2target(y_angle, target_height, camera_height):
+    return abs((target_height - camera_height) / math.tan(math.radians(y_angle)))
+
 def pixel2degrees(point, resolution, diagonal_fov, camera_angle):
     x = point[0]
     y = point[1]
     res_x = resolution[0]
     res_y = resolution[1]
 
-    ptd = diagonal_fov / math.sqrt(math.pow(res_x, 2), math.pow(res_y, 2))
+    ptd = diagonal_fov / math.sqrt(math.pow(res_x, 2) + math.pow(res_y, 2))
 
     angle_x = ((res_x / 2) - x) * ptd
-    angle_y = ((res_y / 2) - cy) * ptd + camera_angle
+    angle_y = ((res_y / 2) - y) * ptd + camera_angle
 
     return (angle_x, angle_y)
 
@@ -63,13 +67,14 @@ def sig_handler(signum, frame):
 
 if __name__ == '__main__':
     signal.signal(signal.SIGSEGV, sig_handler)
-    os.kill(os.getpid(), signal.SIGSEGV)
     name = sys.argv[1]
-    print(name)
     frame = cv2.imread(name, cv2.IMREAD_COLOR)
-    print(type(frame))
     mask = erode_dilate_mask(frame)
     center = find_contoured_centroid(mask)
+    angle = pixel2degrees(center, (1920, 1080), 75.2, 0)
+    distance = dist2target(angle[1], 9.375, 5.0)
 
     print("Center: {}".format(center))
+    print("Angle: {}".format(angle))
+    print("Ditance: {}".format(distance))
 
