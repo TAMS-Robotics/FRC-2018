@@ -72,7 +72,7 @@ if __name__ == '__main__':
     mask = erode_dilate_mask(frame)
     center = find_contoured_centroid(mask)
     angle = pixel2degrees(center, (1920, 1080), 75.2, 0)
-    distance = dist2target(angle[1], 9.375, 5.0)
+    distance = dist2target(angle[1], 9.375, 5.0) / 12.0
 
     print("Center: {}".format(center))
     print("Angle: {}".format(angle))
