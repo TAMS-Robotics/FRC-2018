@@ -3,6 +3,14 @@ import cv2
 import pyrealsense
 
 import sys
+import os
+import signal
+import time
+
+from networktables import NetworkTables
+
+NetworkTables.initialize(server = '10.52.12.2')
+vision_table = NetworkTables.getTable('vision') 
 
 redLower = np.array([-10, 100, 100])
 redUpper = np.array([10, 255, 255])
@@ -48,7 +56,14 @@ def pixel2degrees(point, resolution, diagonal_fov, camera_angle):
 
     return (angle_x, angle_y)
 
+def sig_handler(signum, frame):
+    segfaults = vision_table.getSubTable('segfaults')
+    segfaults.putBoolean("".format(time.time()), True)
+
+
 if __name__ == '__main__':
+    signal.signal(signal.SIGSEGV, sig_handler)
+    os.kill(os.getpid(), signal.SIGSEGV)
     name = sys.argv[1]
     print(name)
     frame = cv2.imread(name, cv2.IMREAD_COLOR)
@@ -57,3 +72,4 @@ if __name__ == '__main__':
     center = find_contoured_centroid(mask)
 
     print("Center: {}".format(center))
+
