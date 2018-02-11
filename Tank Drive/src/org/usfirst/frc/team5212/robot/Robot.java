@@ -1,13 +1,13 @@
 package org.usfirst.frc.team5212.robot;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.drive.*;
 import edu.wpi.first.wpilibj.command.*;
-import com.ctre.phoenix.motorcontrol.can.*;
+
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
@@ -18,8 +18,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 public class Robot extends IterativeRobot {
 
 	/* talons for arcade drive */
-	WPI_TalonSRX frontLeftMotor = new WPI_TalonSRX(0); //0 1 5
-	WPI_TalonSRX frontRightMotor = new WPI_TalonSRX(2); //2 3 4
+	WPI_TalonSRX frontLeftMotor = new WPI_TalonSRX(RobotMap.frontLeftPort); //0 1 5
+	WPI_TalonSRX frontRightMotor = new WPI_TalonSRX(RobotMap.frontRightPort); //2 3 4
 
 	/* extra talons and victors for six motor drives */
 	
@@ -28,11 +28,11 @@ public class Robot extends IterativeRobot {
 	
 	//WPI_TalonSRX leftSecondSlave = new WPI_TalonSRX();
 	//WPI_TalonSRX rightSecondSlave = new WPI_TalonSRX();
-	WPI_TalonSRX leftSlave1 = new WPI_TalonSRX(1);
-	WPI_TalonSRX rightSlave1 = new WPI_TalonSRX(3);
+	WPI_TalonSRX leftSlave1 = new WPI_TalonSRX(RobotMap.leftSlave1Port);
+	WPI_TalonSRX rightSlave1 = new WPI_TalonSRX(RobotMap.rightSlave1Port);
 
-	WPI_TalonSRX leftSlave2 = new WPI_TalonSRX(5);
-	WPI_TalonSRX rightSlave2 = new WPI_TalonSRX(4);
+	WPI_TalonSRX leftSlave2 = new WPI_TalonSRX(RobotMap.leftSlave2Port);
+	WPI_TalonSRX rightSlave2 = new WPI_TalonSRX(RobotMap.rightSlave2Port);
 	
 	DifferentialDrive drive = new DifferentialDrive(frontLeftMotor, frontRightMotor);
 
