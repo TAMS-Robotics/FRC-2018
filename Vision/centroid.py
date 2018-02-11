@@ -12,8 +12,8 @@ from networktables import NetworkTables
 NetworkTables.initialize(server = '10.52.12.2')
 vision_table = NetworkTables.getTable('vision') 
 
-redLower = np.array([-10, 100, 100])
-redUpper = np.array([10, 255, 255])
+redLower = np.array([50, 100, 100])
+redUpper = np.array([70, 255, 255])
 
 def find_contoured_centroid(mask):
     cnts = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
