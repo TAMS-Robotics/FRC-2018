@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
+import org.usfirst.frc.team5212.autonomous.commands.EncoderDrive;
 import org.usfirst.frc.team5212.robot.*;
 
 public class DriveBase extends Subsystem {
@@ -28,13 +29,15 @@ public class DriveBase extends Subsystem {
 	double speedR= 1.0;
 	// or we could do something related to Robot.something? 
 	
-	@Override
-	protected void initDefaultCommand() {
+	public DriveBase() {
 		leftSlave1.follow(frontL);
 		rightSlave1.follow(frontR);
 		leftSlave2.follow(frontL);
 		rightSlave2.follow(frontR);
-		
+	}
+	
+	@Override
+	protected void initDefaultCommand() {
 	}
 	
 	public void forward() {

@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj.command.*;
 public class AutonomousCommand extends CommandGroup {
 
 	public AutonomousCommand() {
-		addParallel(new EncoderDrive());
-		addParallel(new EncoderTurn());
-		addSequential(new PrepareShoot());
-		addSequential(new Shoot());
+//		addSequential(new EncoderDrive());
+//		addSequential(new EncoderTurn());
+//		addSequential(new PrepareShoot());
+//		addSequential(new Shoot());
 	}
 }

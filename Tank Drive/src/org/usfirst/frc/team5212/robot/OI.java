@@ -7,11 +7,23 @@
 
 package org.usfirst.frc.team5212.robot;
 
+import org.usfirst.frc.team5212.autonomous.commands.PrepareShoot;
+
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
+	public static Joystick j = new Joystick(0);
+	public static Button a = new JoystickButton(j, 2);
+	
+	public OI() {
+		a.whenPressed(new PrepareShoot());
+	}
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a
 	//// joystick.
