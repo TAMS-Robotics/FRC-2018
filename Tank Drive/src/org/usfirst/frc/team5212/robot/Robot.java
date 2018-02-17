@@ -61,18 +61,33 @@ public class Robot extends IterativeRobot {
 	double speedR = 0.5;
 	double speedL = 0.5;
 	
-	double leftInput;
-	double rightInput;
-	
+	// keeps track of the time
 	Timer timer;
+	// logs the input of the left joystick at the top of every teleopPeriodic
+	double leftInput;
+	// logs the input of the right joystick
+	double rightInput;
+	// tracker for updating the input history every tenth of a second
 	double lastTenthSecond;
-	Queue<Double> leftInputHistory;
-	Queue<Double> rightInputHistory;
+	// constant storing the threshold value of the input in input units (0-255) per second
 	double jumpThreshold;
-	boolean leftInputJump;
-	boolean rightInputJump;
+	// time at which the last jump was logged
+	double leftJumpTime;
+	double rightJumpTime;
+	// stores the input before the last jump
 	double leftPrevious;
 	double rightPrevious;
+	// store the function output
+	double functionOutput;
+	// keep track of a positive or negative jump
+	int leftJumpDirection;
+	int rightJumpDirection;
+	// trigger for tracking if a jump has been detected
+	boolean leftInputJump;
+	boolean rightInputJump;
+	// Keeps the input history for the last second
+	Queue<Double> leftInputHistory;
+	Queue<Double> rightInputHistory;
 	
 	
 	// OI oi;
@@ -201,9 +216,55 @@ public class Robot extends IterativeRobot {
 		if(leftInputJump || Math.abs(leftInputHistory.element() - leftInput) > jumpThreshold) {
 			if(!leftInputJump) {
 				leftInputJump = true;
+				leftJumpTime = timer.get();
 				leftPrevious = leftInputHistory.element();
+				if(leftInputHistory.element() - leftInput > 0)
+					leftJumpDirection = 1;
+				else
+					leftJumpDirection = -1;
 			}
-			if(leftInputJump && jumpThreshold*)
+			if(leftInputJump) {
+				functionOuput = leftJumpDirection * inputThreshold * (time.get() - leftJumpTime) + leftPrevious;
+				if(leftJumpDirection = 1) {
+					if(functionOutput < leftInput)
+						leftInput = functionOutput;
+					else
+						leftInputJump = false;
+				}
+				else {
+					if(functionOutput > leftInput)
+						leftInput = functionOutput;
+					else
+						leftInputJump = false;
+				}
+			}
+		}
+		
+		if(rightInputJump || Math.abs(rightInputHistory.element() - rightInput) > jumpThreshold) {
+			if(!rightInputJump) {
+				rightInputJump = true;
+				rightJumpTime = timer.get();
+				rightPrevious = rightInputHistory.element();
+				if(rightInputHistory.element() - rightInput > 0)
+					rightJumpDirection = 1;
+				else
+					rightJumpDirection = -1;
+			}
+			if(rightInputJump) {
+				functionOuput = rightJumpDirection * inputThreshold * (time.get() - rightJumpTime) + rightPrevious;
+				if(rightJumpDirection = 1) {
+					if(functionOutput < rightInput)
+						rightInput = functionOutput;
+					else
+						rightInputJump = false;
+				}
+				else {
+					if(functionOutput > rightInput)
+						rightInput = functionOutput;
+					else
+						rightInputJumpt = false;
+				}
+			}
 		}
 		//Need to add a sloping function and handle both sides of robot
 		
