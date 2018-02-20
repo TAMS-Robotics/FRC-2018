@@ -6,9 +6,11 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
+import org.usfirst.frc.team5212.autonomous.commands.EncoderDrive;
 import org.usfirst.frc.team5212.robot.*;
 
 public class DriveBase extends Subsystem {
+	
 	WPI_TalonSRX frontL = new WPI_TalonSRX(RobotMap.frontLeftPort);
 	WPI_TalonSRX frontR = new WPI_TalonSRX(RobotMap.frontRightPort);
 	WPI_TalonSRX leftSlave1 = new WPI_TalonSRX(RobotMap.leftSlave1Port);
@@ -28,13 +30,15 @@ public class DriveBase extends Subsystem {
 	double speedR= 1.0;
 	// or we could do something related to Robot.something? 
 	
-	@Override
-	protected void initDefaultCommand() {
+	public DriveBase() {
 		leftSlave1.follow(frontL);
 		rightSlave1.follow(frontR);
 		leftSlave2.follow(frontL);
 		rightSlave2.follow(frontR);
-		
+	}
+	@Override
+	protected void initDefaultCommand() {
+		setDefaultCommand(new EncoderDrive());
 	}
 	
 	public void forward() {
@@ -42,6 +46,7 @@ public class DriveBase extends Subsystem {
 	}
 	
 	public void fluidTurn(TurnDirection dir) {
+		// here we want to slowly reduce the speed of the 
 		return;
 	}
 
