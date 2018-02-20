@@ -1,31 +1,34 @@
 package org.usfirst.frc.team5212.autonomous.commands;
 
+import org.usfirst.frc.team5212.robot.Robot;
+
 import edu.wpi.first.wpilibj.command.Command;
 
 public class PrepareShoot extends Command {
 
 	public PrepareShoot() {
-		requires(null);
+		super("PrepareShoot");
+		requires(Robot.pneum);
+		setTimeout(5);
 	}
-	
+
 	protected void initialize() {
-		// TODO Auto-generated method stub
+		System.out.println("compress init");
+		Robot.pneum.compress();
 	}
-	
+
 	protected void execute() {
-		// TODO Auto-generated method stub
 	}
 
 	protected boolean isFinished() {
-		// TODO Auto-generated method stub
-		return false;
+		return isTimedOut();
 	}
 
 	protected void end() {
-		
+		Robot.pneum.stopCompress();
 	}
-		
+
 	protected void interrupted() {
-		// TODO Auto-generated method stub
+		end();
 	}
 }

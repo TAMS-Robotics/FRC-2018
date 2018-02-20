@@ -1,8 +1,6 @@
 package org.usfirst.frc.team5212.autonomous.commands;
 
-
-import org.usfirst.frc.team5212.autonomous.subsystems.DriveBase;
-import org.usfirst.frc.team5212.robot.RobotMap;
+import org.usfirst.frc.team5212.robot.Robot;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -10,9 +8,9 @@ import edu.wpi.first.wpilibj.command.Command;
 public class EncoderDrive extends Command {
 	
 	public EncoderDrive() {
-		
-		setTimeout(2.0);
-		
+		super("EncoderDrive");
+		requires(Robot.piddrive);
+		setTimeout(5);
 	}
 
 	// called once when this Command is initialized
@@ -26,7 +24,7 @@ public class EncoderDrive extends Command {
 
 	// returns true when method no longer needs to execute
 	protected boolean isFinished() {
-		return false;
+		return isTimedOut();
 	}
 
 	// called once after isFinished() is called

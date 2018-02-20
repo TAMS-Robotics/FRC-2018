@@ -1,3 +1,9 @@
+#!/bin/sh
+
+# Update the system
+sudo apt update -y
+sudo apt upgrade -y
+
 # Start jetson_clocks
 sudo ~/jetson_clocks.sh
 
@@ -77,7 +83,7 @@ cmake \
     -DINSTALL_C_EXAMPLES=ON \
     -DINSTALL_TESTS=ON \
     -DOPENCV_TEST_DATA_PATH=../opencv_extra/testdata \
-    -DOPENCV_EXTRA_MODULES_PATH=../../opencv_contib/modules \
+    -DOPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules \
     ../
 
 make -j4
@@ -94,7 +100,8 @@ cd installLibrealsenseTX1
 
 # install pip and pyrealsense
 cd $HOME
-sudo apt install python-pip
+sudo apt install -y python-pip
+sudo -H pip install --upgrade pip
 sudo -H pip install pycparser numpy cython pyyaml
 sudo -H pip install pyrealsense
 
@@ -103,3 +110,7 @@ sudo -H pip install pynetworktables
 
 sudo -H pip install ipython
 
+# Install GStreamer
+sudo apt-get install gstreamer1.0-tools gstreamer1.0-alsa \
+  gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
+  gstreamer1.0-plugins-ugly gstreamer1.0-plugins-bad gstreamer1.0-libav v4l-utils -y

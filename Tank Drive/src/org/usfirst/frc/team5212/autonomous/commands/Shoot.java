@@ -1,32 +1,35 @@
 package org.usfirst.frc.team5212.autonomous.commands;
 
+import org.usfirst.frc.team5212.autonomous.subsystems.Pneumatics;
+import org.usfirst.frc.team5212.robot.Robot;
+
 import edu.wpi.first.wpilibj.command.Command;
 
 public class Shoot extends Command {
 
+	Pneumatics pneum = new Pneumatics();
 	public Shoot() {
-		requires(null);
+		super ("Shoot");
+		requires(Robot.pneum);
 	}
 	
 	protected void initialize() {
+		Robot.pneum.shoot();
 	}
 	
 	protected void execute() {
-		shoot();
 	}
 
 	protected boolean isFinished() {
-		return false;
+		return true;
 	}
 
 	protected void end() {
-		
+		Robot.pneum.lock();
 	}
 		
 	protected void interrupted() {
+		end();
 	}
-	
-	private void shoot() {
-		
-	}
+
 }
