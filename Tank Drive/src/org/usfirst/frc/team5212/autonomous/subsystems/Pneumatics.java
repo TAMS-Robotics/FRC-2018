@@ -5,49 +5,41 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-import org.usfirst.frc.team5212.autonomous.commands.PrepareShoot;
 import org.usfirst.frc.team5212.robot.*;
 
 public class Pneumatics extends Subsystem {
 	
-	Compressor main = new Compressor(RobotMap.compressorPort);
-	//	DoubleSolenoid solenoidOne = new DoubleSolenoid(0, 1);
-
-	boolean isEnabled = main.enabled();
-	boolean pressureSwitch = main.getPressureSwitchValue();
-	double current = main.getCompressorCurrent();
-	// or we could do something related to Robot.somethingdu? 
+	Compressor compressor = new Compressor(RobotMap.compressorPort);
+	//DoubleSolenoid solenoid1 = new DoubleSolenoid(RobotMap.solenoidPortOne, RobotMap.solenoidPortTwo);
 
 	@Override
 	protected void initDefaultCommand() {
 		System.out.println("Compressor init");
-		main.setClosedLoopControl(true);
-
-		main.stop();
-
+		compressor.setClosedLoopControl(false);
 	}
 
-	public void compressAir()
+	public void compress()
 	{
 		System.out.println("Compressor compressing");
-		main.start();
+		compressor.setClosedLoopControl(true);
 	}
 
 	public void stopCompress()
 	{
-		main.stop();
+		compressor.setClosedLoopControl(false);
 	}
 
-	/*	public void shootMyKintama () throws InterruptedException
+	public void shoot()
 	{
-
-		solenoidOne.set(DoubleSolenoid.Value.kForward);
-
-		solenoidOne.wait(5000);
+		//solenoid1.set(DoubleSolenoid.Value.kForward);
 	}
 
-	public void stopShooting ()
+	public void reset()
 	{
-		solenoidOne.set(DoubleSolenoid.Value.kOff);
-	}*/
+		//solenoid1.set(DoubleSolenoid.Value.kReverse);
+	}
+	
+	public void lock() {
+		//solenoid1.set(DoubleSolenoid.Value.kOff);
+	}
 }

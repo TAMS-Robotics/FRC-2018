@@ -24,8 +24,29 @@ public class RobotMap {
 	public static final int TIMEOUT = 2;
 	
 	public static final int compressorPort = 0;
+	public static final int solenoidPortOne = 0;
+	public static final int solenoidPortTwo = 1;
 	
 	public static final int pdpPort = 0;
 	
-	public static final double voltageDropThreshold = 7.0;
+	public static final double voltageDropThreshold = 8.0;
+	public static final double speedR = 1.;
+	public static final double speedL = 1.;
+	public static int leftJoystickPort = 1;
+	public static int rightJoystickPort = 3;
+
+	
+	public static final int xButton = 1;
+	public static final int yButton = 4;
+	public static final int aButton = 2;
+	public static final int bButton = 3;
+	public static final int lbButton = 5;
+	public static final int rbButton = 6;
+	public static final int ltButton = 7;
+	public static final int rtButton = 8;
+	
+	public static final double frontLeftMotorKp = 2.0;
+	public static final double frontLeftMotorKi = 0.0;
+	public static final double frontLeftMotorKd = 0.0;	
+
 }
