@@ -34,7 +34,6 @@ public class Robot extends IterativeRobot {
 	Joystick joy = new Joystick(0);
 	
 	
-	
 	NetworkTable table;
 	NetworkTableInstance inst;
 
