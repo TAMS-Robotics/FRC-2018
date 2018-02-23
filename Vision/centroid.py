@@ -16,6 +16,38 @@ vision_table = NetworkTables.getTable('vision')
 greenLower = np.array([40, 100, 100])
 greenUpper = np.array([90, 255, 255])
 
+resolution = (1920, 1080)
+diagonal_fov = 75.2
+target_height = 9.375
+camera_height = 2.7916667
+camera_angle = 0
+
+def get_target_values(frame):
+    mask = erode_dilate_mask(frame)
+    center = find_contoured_centroid(mask)
+
+    angle = pixel2degrees(center, resolution, diagonal_fov, camera_angle)
+    distance = dist2target(angle[1], target_height, camera_height)
+
+    return (angle[1], distance)
+
+
+def dist2target(y_angle, target_height, camera_height):
+    return abs((target_height - camera_height) / math.tan(math.radians(y_angle)))
+
+def pixel2degrees(point, resolution, diagonal_fov, camera_angle):
+    x = point[0]
+    y = point[1]
+    res_x = resolution[0]
+    res_y = resolution[1]
+
+    ptd = diagonal_fov / math.sqrt(math.pow(res_x, 2) + math.pow(res_y, 2))
+
+    angle_x = ((res_x / 2) - x) * ptd
+    angle_y = ((res_y / 2) - y) * ptd + camera_angle
+
+    return (angle_x, angle_y)
+
 def find_contoured_centroid(mask):
     cnts = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
     center = None
@@ -49,22 +81,6 @@ def erode_dilate_mask(frame):
 
     return eroded_dilated
 
-def dist2target(y_angle, target_height, camera_height):
-    return abs((target_height - camera_height) / math.tan(math.radians(y_angle)))
-
-def pixel2degrees(point, resolution, diagonal_fov, camera_angle):
-    x = point[0]
-    y = point[1]
-    res_x = resolution[0]
-    res_y = resolution[1]
-
-    ptd = diagonal_fov / math.sqrt(math.pow(res_x, 2) + math.pow(res_y, 2))
-
-    angle_x = ((res_x / 2) - x) * ptd
-    angle_y = ((res_y / 2) - y) * ptd + camera_angle
-
-    return (angle_x, angle_y)
-
 def sig_handler(signum, frame):
     segfaults = vision_table.getSubTable('segfaults')
     segfaults.putBoolean("".format(time.time()), True)
@@ -79,7 +95,7 @@ if __name__ == '__main__':
     cv2.waitKey(0)
     center = find_contoured_centroid(mask)
     angle = pixel2degrees(center, (1920, 1080), 75.2, 0)
-    distance = dist2target(angle[1], 9.375, 5.0) / 12.0
+    distance = dist2target(angle[1], 9.375, 2.791666667) / 12.0
 
     print("Center: {}".format(center))
     print("Angle: {}".format(angle))
