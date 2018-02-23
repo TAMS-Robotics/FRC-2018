@@ -21,11 +21,12 @@ public class ReverseOrientation extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	System.out.println("Reversing orientation");
-    	Robot.drivetrain.reverseOrientaion();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	System.out.println("Actually reversing");
+    	Robot.drivetrain.reverseOrientaion();
     }
 
     // Make this return true when this Command no longer needs to run execute()

@@ -1,13 +1,13 @@
 package org.usfirst.frc.team5212.robot;
 
 import org.usfirst.frc.team5212.autonomous.subsystems.DriveTrain;
-import org.usfirst.frc.team5212.autonomous.subsystems.PIDDrive;
 import org.usfirst.frc.team5212.autonomous.subsystems.Pneumatics;
 
 //import org.usfirst.frc.team5212.autonomous.subsystems.PIDDrive;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.command.Scheduler;
 
 
 public class Robot extends IterativeRobot {
@@ -19,7 +19,6 @@ public class Robot extends IterativeRobot {
 	
 	// subsystem creations
 	
-	public static PIDDrive piddrive;
 	public static DriveTrain drivetrain;
 	public static Pneumatics pneum;
 
@@ -50,7 +49,6 @@ public class Robot extends IterativeRobot {
 		
 		panel = new PowerDistributionPanel(RobotMap.pdpPort);
 
-		piddrive = new PIDDrive();
 		drivetrain = new DriveTrain();
 		pneum = new Pneumatics();
 		oi = new OI();
@@ -78,8 +76,8 @@ public class Robot extends IterativeRobot {
 		leftInput = oi.getLeftJoystick();
 		rightInput = oi.getRightJoystick();
 		
-//		Scheduler.getInstance().run();
-				
+		Scheduler.getInstance().run();
+		System.out.println(drivetrain.leftEncoder.getDistance());
 		drivetrain.slewTankDrive(leftInput, rightInput, panel.getVoltage());
 		
 //		drive.tankDrive(leftInput, rightInput);

@@ -8,7 +8,7 @@ public class EncoderDrive extends Command {
 	
 	public EncoderDrive() {
 		super("EncoderDrive");
-		requires(Robot.piddrive);
+		requires(Robot.drivetrain);
 		setTimeout(5);
 	}
 	

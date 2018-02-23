@@ -4,15 +4,17 @@ package org.usfirst.frc.team5212.autonomous.subsystems;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
+import org.usfirst.frc.team5212.robot.Robot;
 import org.usfirst.frc.team5212.robot.RobotMap;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
-public class DriveTrain extends Subsystem {
+public class DriveTrain extends PIDSubsystem {
 	public WPI_TalonSRX frontLeftMotor = new WPI_TalonSRX(RobotMap.frontLeftPort);
 	public WPI_TalonSRX frontRightMotor = new WPI_TalonSRX(RobotMap.frontRightPort);
 	public WPI_TalonSRX leftSlave1 = new WPI_TalonSRX(RobotMap.leftSlave1Port);
@@ -23,6 +25,9 @@ public class DriveTrain extends Subsystem {
 	int joystickSwap;
 		
 	DifferentialDrive drive = new DifferentialDrive(frontLeftMotor, frontRightMotor);
+	
+	public Encoder leftEncoder = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
+	public Encoder rightEncoder = new Encoder(2, 3, false, Encoder.EncodingType.k4X);
 	
 	
 	// keeps track of the time
@@ -59,6 +64,8 @@ public class DriveTrain extends Subsystem {
 	// or we could do something related to Robot.something? 
 	
 	public DriveTrain() {
+		super("DriveTrain", RobotMap.driveMotorKp, RobotMap.driveMotorKi, RobotMap.driveMotorKd);
+		
 //		frontLeftMotor.setInverted(false);
 //		frontRightMotor.setInverted(false);
 		
@@ -83,11 +90,30 @@ public class DriveTrain extends Subsystem {
 		
 		leftInputJump = false;
 		rightInputJump = false;
+		
+		// The constructor passes a name for the subsystem and the P, I and D constants that are used when computing the motor output
+		setAbsoluteTolerance(0.05);
+		getPIDController().setContinuous(false);
+		
+		leftEncoder.setDistancePerPulse(RobotMap.distancePerPulse);
+		rightEncoder.setDistancePerPulse(RobotMap.distancePerPulse);
+		leftEncoder.reset();
+		rightEncoder.reset();
 	}
 	
 	@Override
 	protected void initDefaultCommand() {
 	}
+	
+    protected double returnPIDInput() {
+    	return leftEncoder.getDistance()-rightEncoder.getDistance(); // returns the sensor value that is providing the feedback for the system
+    }
+
+    protected void usePIDOutput(double output) {
+    	Robot.drivetrain.frontLeftMotor.pidWrite(output);
+    	Robot.drivetrain.frontRightMotor.pidWrite(output); // this is where the computed output value from the PIDController is applied to the motor
+    }
+	
 	
 	public void reverseOrientaion() {
 		joystickSwap = RobotMap.leftJoystickPort;
@@ -95,6 +121,7 @@ public class DriveTrain extends Subsystem {
 		RobotMap.rightJoystickPort = joystickSwap;
 		
 		if(frontLeftMotor.getInverted() && frontRightMotor.getInverted()) {
+			System.out.println("Front is now facing the launcher");
 			frontLeftMotor.setInverted(false);
 			frontRightMotor.setInverted(false);
 			leftSlave1.setInverted(false);
@@ -103,6 +130,7 @@ public class DriveTrain extends Subsystem {
 			rightSlave2.setInverted(false);
 		}
 		else {
+			System.out.println("Front is now the climber");
 			frontLeftMotor.setInverted(true);
 			frontRightMotor.setInverted(true);
 			leftSlave1.setInverted(true);
@@ -154,7 +182,7 @@ public class DriveTrain extends Subsystem {
 				if(leftJumpDirection == 1) {
 					if(functionOutput < leftInput) {
 						// REMOVE WHEN FINISHED DEBUGGING
-						System.out.println(functionOutput);
+//						System.out.println(functionOutput);
 						leftInput = functionOutput;
 					}
 					else {
@@ -164,7 +192,7 @@ public class DriveTrain extends Subsystem {
 				else {
 					if(functionOutput > leftInput) {
 						// REMOVE WHEN FINISHED DEBUGGING
-						System.out.println(functionOutput);
+//						System.out.println(functionOutput);
 						leftInput = functionOutput;
 					}
 					else {
@@ -198,7 +226,7 @@ public class DriveTrain extends Subsystem {
 				if(rightJumpDirection == 1) {
 					if(functionOutput < rightInput) {
 						// REMOVE WHEN FINISHED DEBUGGING
-						System.out.println(functionOutput);
+//						System.out.println(functionOutput);
 						rightInput = functionOutput;
 					}
 					else {
@@ -208,7 +236,7 @@ public class DriveTrain extends Subsystem {
 				else {
 					if(functionOutput > rightInput) {
 						// REMOVE WHEN FINISHED DEBUGGING
-						System.out.println(functionOutput);
+//						System.out.println(functionOutput);
 						rightInput = functionOutput;
 					}
 					else {
