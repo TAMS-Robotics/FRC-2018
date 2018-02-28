@@ -95,6 +95,8 @@ def make_true_frame(frame):
     return clear
 
 def sig_handler(signum, frame):
+    segfaults = vision_table.getSubTable('segfaults')
+    segfaults.putBoolean("".format(time.time()), True)
     logging.warning("%s occurred at %s at %s.", str.format(signum), str.format(frame), exc_info = True)
 
 with pyrs.Service() as serv:
