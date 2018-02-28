@@ -33,7 +33,8 @@ camera_distortion_matrix = np.array([[1.2967497853950866e-01, 4.5607189281390443
 new_camera_matrix, region_of_interest = cv2.getOptimalNewCameraMatrix(camera_matrix, camera_distortion_matrix, (res_x, res_y), 1, (res_x, res_y))
 
 def get_target_values(frame):
-    mask = erode_dilate_mask(frame)
+    clear = make_true_frame(frame)
+    mask = erode_dilate_mask(clear)
     center = find_contoured_centroid(mask)
 
     angle = pixel2degrees(center, resolution, diagonal_fov, camera_angle)
@@ -75,7 +76,7 @@ def find_contoured_centroid(mask):
         logging.info("Contours: %s", str.format(ordered_cnts))
 
     return center
-
+# TODO: use getStructuringElement in later iterations
 def erode_dilate_mask(frame):
     blurred = cv2.GaussianBlur(frame, (11, 11), 0)
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -96,4 +97,22 @@ def make_true_frame(frame):
 
 def sig_handler(signum, frame):
     logging.warning("%s occurred at %s at %s.", str.format(signum), str.format(frame), exc_info = True)
+
+with pyrs.Service() as serv:
+    with serv.Device() as dev:
+        while True:
+            dev.wait_for_frames()
+            frame = dev.color
+            frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+
+            timer = cv2.getTickCount()
+
+            x_angle, distance = get_target_values(frame)
+
+            fps = cv2.getTickFrequency() / (cv2.getTickCount() - timer)
+
+            vision.putNumber('angle', x_angle)
+            vision.putNumber('distance', distance)
+
+            time.sleep(2.9)
 
