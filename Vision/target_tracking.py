@@ -9,7 +9,6 @@ import os
 import signal
 import time
 import math
-import time
 import logging
 
 NetworkTables.initialize(server = '10.52.12.2')
