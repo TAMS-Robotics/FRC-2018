@@ -58,7 +58,7 @@ def pixel2degrees(point, resolution, diagonal_fov, camera_angle):
 
     return (angle_x, angle_y)
 
-def find_contoured_centroid(mask):
+def find_optimal_contoured_centroid(mask):
     cnts = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
     center = None
 
@@ -79,7 +79,27 @@ def find_contoured_centroid(mask):
         
         return center
 
-# TODO: implement target cost algorith 
+def find_contoured_centroid(mask):
+    cnts = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
+    center = None
+
+    if len(cnts) > 0:
+        ordered_cnts = sorted(cnts, key = cv2.contourArea)
+        first = ordered_cnts[len(ordered_cnts) - 1]
+        second = ordered_cnts[len(ordered_cnts) - 2]
+        moments1 = cv2.moments(first)
+        moments2 = cv2.moments(second)
+
+        center1 = (int(moments1["m10"] / moments1["m00"]), int(moments1["m01"] / moments1["m00"]))
+        center2 = (int(moments2["m10"] / moments2["m00"]), int(moments2["m01"] / moments2["m00"]))
+
+        center = ((center1[0] + center2[0]) / 2, (center1[1] + center2[1]) / 2)
+
+        logging.info("Contours: %s", str.format(ordered_cnts))
+        
+        return center
+
+# TODO: implement target cost algorithm 
 def find_optimal_contours(contours):
     best_contours = None
     for p1, p2 in combinations(contours, 2):
