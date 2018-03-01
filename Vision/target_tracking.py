@@ -102,6 +102,13 @@ def sig_handler(signum, frame):
 with pyrs.Service() as serv:
     with serv.Device() as dev:
         while True:
+            try:
+                custom_options = [(rs_option.RS_OPTION_COLOR_EXPOSURE, 30.0),
+                                  (rs_option.RS_OPTION_COLOR_GAIN, 100.0)]
+                dev.set_device_options(*zip(*custom_options))
+            except pyrs.RealsenseError:
+                logging.warning("Exposure change failed.")
+
             dev.wait_for_frames()
             frame = dev.color
             frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
