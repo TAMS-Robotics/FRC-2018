@@ -64,19 +64,21 @@ def find_contoured_centroid(mask):
 
     if len(cnts) > 0:
         ordered_cnts = sorted(cnts, key = cv2.contourArea)
-        first = ordered_cnts[len(ordered_cnts) - 1]
-        second = ordered_cnts[len(ordered_cnts) - 2]
-        moments1 = cv2.moments(first)
-        moments2 = cv2.moments(second)
+        top_contours = ordered_cnts[-8:]
 
-        center1 = (int(moments1["m10"] / moments1["m00"]), int(moments1["m01"] / moments1["m00"]))
-        center2 = (int(moments2["m10"] / moments2["m00"]), int(moments2["m01"] / moments2["m00"]))
+        best_pair = find_optimal_contours(top_contours)
+        target = cv2.convexHull(np.concatenate(best_pair[0], best_pair[1]))
 
-        center = ((center1[0] + center2[0]) / 2, (center1[1] + center2[1]) / 2)
+        moments = cv2.moments(target)
+        cx = int(moments['m10'] / moments['m00'])
+        cy = int(moments['m01'] / moments['m00'])
+
+        center = (cx, cy)
 
         logging.info("Contours: %s", str.format(ordered_cnts))
         
         return center
+
 # TODO: implement target cost algorith 
 def find_optimal_contours(contours):
     best_contours = None
