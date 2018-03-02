@@ -2,31 +2,30 @@ package org.usfirst.frc.team5212.autonomous.subsystems;
 
 
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 import org.usfirst.frc.team5212.robot.*;
 
 public class Pneumatics extends Subsystem {
 	
-	Compressor compressor = new Compressor(RobotMap.compressorPort);
+//	Compressor compressor = new Compressor(RobotMap.compressorPort);
 	//DoubleSolenoid solenoid1 = new DoubleSolenoid(RobotMap.solenoidPortOne, RobotMap.solenoidPortTwo);
 
 	@Override
 	protected void initDefaultCommand() {
 		System.out.println("Compressor init");
-		compressor.setClosedLoopControl(false);
+//		compressor.setClosedLoopControl(false);
 	}
 
 	public void compress()
 	{
 		System.out.println("Compressor compressing");
-		compressor.setClosedLoopControl(true);
+//		compressor.setClosedLoopControl(true);
 	}
 
 	public void stopCompress()
 	{
-		compressor.setClosedLoopControl(false);
+//		compressor.setClosedLoopControl(false);
 	}
 
 	public void shoot()

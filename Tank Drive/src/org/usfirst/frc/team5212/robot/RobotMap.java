@@ -57,4 +57,14 @@ public class RobotMap {
 	public static final double shooterKi = 0.7;
 	public static final double shooterKd = 0.3;	
 	
+	public static final double driveMotorKp = 2.0;
+	public static final double driveMotorKi = 0.0;
+	public static final double driveMotorKd = 0.0;
+	
+	public static final double  armMotorKp = 2.0;
+	public static final double  armMotorKi = 0.0;
+	public static final double  armMotorKd = 0.0;
+
+	
+	public static final double distancePerPulse = Math.PI * 6 / 12 / 2048;
 }
