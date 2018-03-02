@@ -41,7 +41,7 @@ def get_target_values(frame):
     angle = pixel2degrees(center, resolution, diagonal_fov, camera_angle)
     distance = dist2target(angle[1], target_height, camera_height)
 
-    return (angle[0], distance)
+    return (math.radians(angle[0]), distance)
 
 
 def dist2target(y_angle, target_height, camera_height):
