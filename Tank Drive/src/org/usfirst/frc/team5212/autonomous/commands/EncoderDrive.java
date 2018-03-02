@@ -2,39 +2,35 @@ package org.usfirst.frc.team5212.autonomous.commands;
 
 import org.usfirst.frc.team5212.robot.Robot;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
-public class EncoderDrive extends Command {
-	
+public class EncoderDrive extends Command{
+
 	public EncoderDrive() {
-		super("EncoderDrive");
-		requires(Robot.piddrive);
+		requires(Robot.drivetrain);
 		setTimeout(5);
 	}
-
-	// called once when this Command is initialized
+	
+	@Override
 	protected void initialize() {
 	}
-
-	// called repeatedly in Autonomous mode
+	
+	@Override
 	protected void execute() {
-		
 	}
-
-	// returns true when method no longer needs to execute
+	
+	@Override
 	protected boolean isFinished() {
 		return isTimedOut();
 	}
 
-	// called once after isFinished() is called
+	@Override 
 	protected void end() {
-
+		
 	}
-
-	// called when another Command interrupts the execution of this Command
-	// we'll just call the end
+	
+	@Override
 	protected void interrupted() {
-		end();
+		this.end();
 	}
 }
