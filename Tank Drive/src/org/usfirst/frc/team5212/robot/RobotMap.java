@@ -20,21 +20,34 @@ public class RobotMap {
 	public static final int rightSlave1Port = 3;
 	public static final int leftSlave2Port = 5;
 	public static final int rightSlave2Port = 4;
-	
+	        
 	public static final int TIMEOUT = 2;
-	
+	        
 	public static final int compressorPort = 0;
 	public static final int solenoidPortOne = 0;
 	public static final int solenoidPortTwo = 1;
-	
+	        
 	public static final int pdpPort = 0;
-	
+	        
 	public static final double voltageDropThreshold = 8.0;
 	public static final double speedR = 1.;
 	public static final double speedL = 1.;
+	
+	// not final 
+	// needs to be assigned in DriveTrain.java
+	// dont make this final amogh u idiot
 	public static int leftJoystickPort = 1;
 	public static int rightJoystickPort = 3;
-
+            
+	public static final int ioLeftArmPort = 0; // test
+	public static final int ioRightArmPort = 1; // test
+	
+	public static final int leftArmIntakeSpeed = 1;
+	public static final int rightArmIntakeSpeed = 1;
+	
+	public static final int leftArmOutputSpeed = -1;
+	public static final int rightArmOutputSpeed = -1;
+	
 	
 	public static final int xButton = 1;
 	public static final int yButton = 4;
@@ -44,7 +57,7 @@ public class RobotMap {
 	public static final int rbButton = 6;
 	public static final int ltButton = 7;
 	public static final int rtButton = 8;
-	
+	        
 	public static final double driveMotorKp = 2.0;
 	public static final double driveMotorKi = 0.0;
 	public static final double driveMotorKd = 0.0;

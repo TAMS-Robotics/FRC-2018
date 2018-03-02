@@ -7,9 +7,12 @@
 
 package org.usfirst.frc.team5212.robot;
 
+import org.usfirst.frc.team5212.autonomous.commands.Intake;
 import org.usfirst.frc.team5212.autonomous.commands.PrepareShoot;
 import org.usfirst.frc.team5212.autonomous.commands.ReverseOrientation;
 //import org.usfirst.frc.team5212.autonomous.commands.ShootAndReset;
+import org.usfirst.frc.team5212.autonomous.commands.ShootAndOutput;
+import org.usfirst.frc.team5212.autonomous.commands.ShootAndReset;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -32,9 +35,15 @@ public class OI {
 	Button x = new JoystickButton(j, RobotMap.xButton);
 	Button y = new JoystickButton(j, RobotMap.yButton);
 	
+	Button in, out; // responsible for intake and outtake, respectively
+	Button shoot;
+	
 	public OI() {
 		a.whenPressed(new ReverseOrientation());
 		b.whenPressed(new PrepareShoot());
+		in.whenPressed(new Intake());
+		out.whenPressed(new ShootAndOutput());
+		shoot.whenPressed(new ShootAndReset());
 	}
 
 	public Joystick getJ() {
@@ -77,6 +86,24 @@ public class OI {
 		this.y = y;
 	}
 	
+	public Button getIn() {
+		return in;
+	}
+	
+	public void setIn(Button in) {
+		this.in = in;
+	}
+	
+	public Button getOut() {
+		return out;
+	}
+	
+	public void setOut(Button out) {
+		this.out = out;
+	}
+	
+	
+	
 	public double getLeftJoystick() {
 		return this.j.getRawAxis(RobotMap.leftJoystickPort);
 	}
@@ -84,33 +111,4 @@ public class OI {
 	public double getRightJoystick() {
 		return this.j.getRawAxis(RobotMap.rightJoystickPort);
 	}
-	
-	
-	//// CREATING BUTTONS
-	// One type of button is a joystick button which is any button on a
-	//// joystick.
-	// You create one by telling it which joystick it's on and which button
-	// number it is.
-	// Joystick stick = new Joystick(port);
-	// Button button = new JoystickButton(stick, buttonNumber);
-
-	// There are a few additional built in buttons you can use. Additionally,
-	// by subclassing Button you can create custom triggers and bind those to
-	// commands the same as any other Button.
-
-	//// TRIGGERING COMMANDS WITH BUTTONS
-	// Once you have a button, it's trivial to bind it to a button in one of
-	// three ways:
-
-	// Start the command when the button is pressed and let it run the command
-	// until it is finished as determined by it's isFinished method.
-	// button.whenPressed(new ExampleCommand());
-
-	// Run the command while the button is being held down and interrupt it once
-	// the button is released.
-	// button.whileHeld(new ExampleCommand());
-
-	// Start the command when the button is released and let it run the command
-	// until it is finished as determined by it's isFinished method.
-	// button.whenReleased(new ExampleCommand());
 }

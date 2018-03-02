@@ -4,28 +4,33 @@ import org.usfirst.frc.team5212.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class Shoot extends Command {
+public class Intake extends Command {
 
-	public Shoot() {
-		super ("Shoot");
-		requires(Robot.pneum);
+	public Intake() {
+		requires(Robot.cubeIO); // create new subsystem for intake motor control
+		setTimeout(5);
 	}
 	
+	@Override
 	protected void initialize() {
-		Robot.pneum.shoot();
 	}
 	
+	@Override
 	protected void execute() {
+		Robot.cubeIO.in();
 	}
-
+	
+	@Override
 	protected boolean isFinished() {
-		return true;
+		return isTimedOut();
 	}
-
+	
+	@Override
 	protected void end() {
-		Robot.pneum.lock();
-	}
 		
+	}
+	
+	@Override
 	protected void interrupted() {
 		end();
 	}

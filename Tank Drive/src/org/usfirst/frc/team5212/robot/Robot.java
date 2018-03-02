@@ -1,11 +1,16 @@
 package org.usfirst.frc.team5212.robot;
 
+import org.usfirst.frc.team5212.autonomous.subsystems.CubeIO;
 import org.usfirst.frc.team5212.autonomous.subsystems.DriveTrain;
 import org.usfirst.frc.team5212.autonomous.subsystems.Pneumatics;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 //import org.usfirst.frc.team5212.autonomous.subsystems.PIDDrive;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.PWMTalonSRX;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Scheduler;
 
@@ -21,13 +26,15 @@ public class Robot extends IterativeRobot {
 	
 	public static DriveTrain drivetrain;
 	public static Pneumatics pneum;
+	public static CubeIO cubeIO; 
 
 	
-//	NetworkTable table;
-//	NetworkTableInstance inst;
-//
-//	NetworkTableEntry leftRawData;
-//	NetworkTableEntry rightRawData;
+	NetworkTableInstance inst;
+	NetworkTable visionTable;
+
+	NetworkTableEntry leftRawData;
+	NetworkTableEntry rightRawData;
+	NetworkTableEntry testNT;
 	
 	final int DEFAULT_DRIVE = 0;	
 	
@@ -47,6 +54,16 @@ public class Robot extends IterativeRobot {
 		 */
 		// ac = new PrepareShoot();
 		
+		inst = NetworkTableInstance.getDefault();
+		visionTable = inst.getTable("vision");
+		
+		testNT = visionTable.getEntry("test");
+		
+		if(testNT.getDouble(0.0) == 123.0)
+			System.out.println("NetworkTables is working");
+		else
+			System.out.println("ERROR: NetworkTables is not working");
+		
 		panel = new PowerDistributionPanel(RobotMap.pdpPort);
 
 		drivetrain = new DriveTrain();
@@ -62,9 +79,11 @@ public class Robot extends IterativeRobot {
 	}
 	
 	public void autonomousPeriodic() {
+		
 	}
 	
 	public void teleopInit() {
+		
 	}
 	
 	/**
@@ -74,11 +93,11 @@ public class Robot extends IterativeRobot {
 //		drivetrain.slewTankDrive(OI.j.getRawAxis(1), OI.j.getRawAxis(3), panel.getVoltage());
 		
 		leftInput = oi.getLeftJoystick();
-		rightInput = oi.getRightJoystick();
+		rightInput = oi.getRightJoystick(); 
 		
 		Scheduler.getInstance().run();
 		System.out.println(drivetrain.leftEncoder.getDistance());
-		drivetrain.slewTankDrive(leftInput, rightInput, panel.getVoltage());
+//		drivetrain.slewTankDrive(leftInput, rightInput, panel.getVoltage());
 		
 //		drive.tankDrive(leftInput, rightInput);
 	}
