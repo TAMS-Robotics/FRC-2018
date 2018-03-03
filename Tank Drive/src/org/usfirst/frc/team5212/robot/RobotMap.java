@@ -23,6 +23,8 @@ public class RobotMap {
 	        
 	public static final int TIMEOUT = 2;
 	        
+	public static final int DEFAULT_DRIVE = 1;
+	
 	public static final int compressorPort = 0;
 	public static final int solenoidPortOne = 0;
 	public static final int solenoidPortTwo = 1;
@@ -58,6 +60,18 @@ public class RobotMap {
 	public static final int ltButton = 7;
 	public static final int rtButton = 8;
 	        
+	
+	public static final double frontLeftMotorKp = 2.0;
+	public static final double frontLeftMotorKi = 0.0;
+	public static final double frontLeftMotorKd = 0.0;	
+	
+	public static final int leftShooterArm = 0; // figure this out for later
+	public static final int rightShooterArm = 0; // figure this out for later
+	
+	public static final double shooterKp = 1.2;
+	public static final double shooterKi = 0.7;
+	public static final double shooterKd = 0.3;	
+	
 	public static final double driveMotorKp = 2.0;
 	public static final double driveMotorKi = 0.0;
 	public static final double driveMotorKd = 0.0;
@@ -65,8 +79,6 @@ public class RobotMap {
 	public static final double  armMotorKp = 2.0;
 	public static final double  armMotorKi = 0.0;
 	public static final double  armMotorKd = 0.0;
-
 	
 	public static final double distancePerPulse = Math.PI * 6 / 12 / 2048;
-
 }

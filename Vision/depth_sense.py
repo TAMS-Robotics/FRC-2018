@@ -14,7 +14,8 @@ depth_stream =  pyrs.stream.DepthStream(fps = depth_fps)
 with pyrs.Service() as serv:
     with serv.Device(streams = (depth_stream,)) as dev:
         dev.apply_ivcam_preset(0)
-
+        
+        
         try:
             custom_options = [(rs_option.RS_OPTION_R200_LR_EXPOSURE, 30.0),
                               (rs_option.RS_OPTION_R200_LR_GAIN, 100.0)]
