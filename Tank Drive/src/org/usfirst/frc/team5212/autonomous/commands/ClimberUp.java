@@ -1,34 +1,35 @@
 package org.usfirst.frc.team5212.autonomous.commands;
 
 import org.usfirst.frc.team5212.robot.Robot;
-import org.usfirst.frc.team5212.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class EncoderTurn extends Command {
-	
-	public EncoderTurn() {
-		requires(Robot.drivetrain);
-		setTimeout(5);
+public class ClimberUp extends Command {
+
+	public ClimberUp() {
+		super ("ClimberUp");
+		requires(Robot.pneum);
 	}
-	
+
 	protected void initialize() {
-		// TODO Auto-generated method stub
+
 	}
-	
+
 	protected void execute() {
-		
+		Robot.pneum.climberUp();
 	}
 
 	protected boolean isFinished() {
-		return isTimedOut();
+		return true;
 	}
 
 	protected void end() {
-	
+		// Robot.pneum.lock();
+		// we don't want to lock
 	}
-		
+
 	protected void interrupted() {
 		end();
 	}
+
 }

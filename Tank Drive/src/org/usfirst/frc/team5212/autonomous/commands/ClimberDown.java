@@ -4,31 +4,30 @@ import org.usfirst.frc.team5212.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class PrepareShoot extends Command {
+public class ClimberDown extends Command {
 
-	public PrepareShoot() {
-		super("PrepareShoot");
+	public ClimberDown() {
+		super ("ClimberDown");
 		requires(Robot.pneum);
-		setTimeout(5);
 	}
-
+	
 	protected void initialize() {
-		System.out.println("compress init");
-		Robot.pneum.compress();
 	}
-
+	
 	protected void execute() {
+		Robot.pneum.climberDown();
 	}
 
 	protected boolean isFinished() {
-		return isTimedOut();
+		return true;
 	}
 
 	protected void end() {
-		Robot.pneum.stopCompress();
+		// stays instead of locking
 	}
-
+		
 	protected void interrupted() {
 		end();
 	}
+
 }

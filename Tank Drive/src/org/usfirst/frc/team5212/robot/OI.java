@@ -7,43 +7,76 @@
 
 package org.usfirst.frc.team5212.robot;
 
+import org.usfirst.frc.team5212.autonomous.commands.ArmDown;
+import org.usfirst.frc.team5212.autonomous.commands.ArmUp;
+import org.usfirst.frc.team5212.autonomous.commands.ClimberDown;
+import org.usfirst.frc.team5212.autonomous.commands.ClimberUp;
 import org.usfirst.frc.team5212.autonomous.commands.Intake;
-import org.usfirst.frc.team5212.autonomous.commands.PrepareShoot;
+import org.usfirst.frc.team5212.autonomous.commands.Reset;
 import org.usfirst.frc.team5212.autonomous.commands.ReverseOrientation;
-//import org.usfirst.frc.team5212.autonomous.commands.ShootAndReset;
+import org.usfirst.frc.team5212.autonomous.commands.Shoot;
 import org.usfirst.frc.team5212.autonomous.commands.ShootAndOutput;
-import org.usfirst.frc.team5212.autonomous.commands.ShootAndReset;
+
+//import org.usfirst.frc.team5212.autonomous.commands.Intake;
+//import org.usfirst.frc.team5212.autonomous.commands.PrepareShoot;
+//import org.usfirst.frc.team5212.autonomous.commands.ReverseOrientation;
+//import org.usfirst.frc.team5212.autonomous.commands.ShootAndReset;
+//import org.usfirst.frc.team5212.autonomous.commands.ShootAndOutput;
+//import org.usfirst.frc.team5212.autonomous.commands.ShootAndReset;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
-/**
- * This class is the glue that binds the controls on the physical operator
- * interface to the commands and command groups that allow control of the robot.
- */
 public class OI {
-//	public static Joystick j = new Joystick(0);
-//	public static Button a = new JoystickButton(j, RobotMap.aButton);
-//	public static Button b = new JoystickButton(j, RobotMap.bButton);
-//	public static Button x = new JoystickButton(j, RobotMap.xButton);
-//	public static Button y = new JoystickButton(j, RobotMap.yButton);
 	
 	Joystick j = new Joystick(0);
-	Button a = new JoystickButton(j, RobotMap.aButton);
-	Button b = new JoystickButton(j, RobotMap.bButton);
-	Button x = new JoystickButton(j, RobotMap.xButton);
-	Button y = new JoystickButton(j, RobotMap.yButton);
 	
-	Button in, out; // responsible for intake and outtake, respectively
-	Button shoot;
+	private Button a = new JoystickButton(j, RobotMap.aButton);
+	private Button x = new JoystickButton(j, RobotMap.xButton);
+	private Button y = new JoystickButton(j, RobotMap.yButton);
+	private Button b = new JoystickButton(j, RobotMap.bButton);
+	private Button start = new JoystickButton(j, RobotMap.startButton);
+	private Button stop = new JoystickButton(j, RobotMap.stopButton);
+	private Button rb = new JoystickButton(j, RobotMap.rbButton);
+	private Button rt = new JoystickButton(j, RobotMap.rtButton);
+	private Button lb = new JoystickButton(j, RobotMap.lbButton);
+	private Button lt = new JoystickButton(j, RobotMap.ltButton);
 	
 	public OI() {
-		a.whenPressed(new ReverseOrientation());
-		b.whenPressed(new PrepareShoot());
-		in.whenPressed(new Intake());
-		out.whenPressed(new ShootAndOutput());
-		shoot.whenPressed(new ShootAndReset());
+		start.whenPressed(new ReverseOrientation());
+		a.whenPressed(new ClimberDown());
+		y.whenPressed(new ClimberUp());
+		x.whenPressed(new Reset());
+		b.whenPressed(new Shoot());
+		rb.whileHeld(new Intake());
+		rt.whileHeld(new ShootAndOutput());
+		lb.whileHeld(new ArmUp());
+		lt.whileHeld(new ArmDown());
+	}
+
+	public Button getStart() {
+		return start;
+	}
+
+	public void setStart(Button start) {
+		this.start = start;
+	}
+
+	public Button getLb() {
+		return lb;
+	}
+
+	public void setLb(Button lb) {
+		this.lb = lb;
+	}
+
+	public Button getLt() {
+		return lt;
+	}
+
+	public void setLt(Button lt) {
+		this.lt = lt;
 	}
 
 	public Joystick getJ() {
@@ -86,23 +119,21 @@ public class OI {
 		this.y = y;
 	}
 	
-	public Button getIn() {
-		return in;
+	public Button getRb() {
+		return rb;
 	}
-	
-	public void setIn(Button in) {
-		this.in = in;
+
+	public void setRb(Button rb) {
+		this.rb = rb;
 	}
-	
-	public Button getOut() {
-		return out;
+
+	public Button getRt() {
+		return rt;
 	}
-	
-	public void setOut(Button out) {
-		this.out = out;
+
+	public void setRt(Button rt) {
+		this.rt = rt;
 	}
-	
-	
 	
 	public double getLeftJoystick() {
 		return this.j.getRawAxis(RobotMap.leftJoystickPort);

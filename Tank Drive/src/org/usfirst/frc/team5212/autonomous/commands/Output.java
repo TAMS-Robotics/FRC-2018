@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class Output extends Command {
 
 	public Output() {
-		requires(Robot.cubeIO); // create new subsystem for intake motor control
+		requires(Robot.cubeIO); 
 		setTimeout(5);
 	}
 	
@@ -27,7 +27,7 @@ public class Output extends Command {
 	
 	@Override
 	protected void end() {
-		
+		Robot.cubeIO.stop();
 	}
 	
 	@Override

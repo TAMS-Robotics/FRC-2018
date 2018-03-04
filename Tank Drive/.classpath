@@ -10,5 +10,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="lib" path="C:/Users/open/wpilib/user/java/lib/CTRE_Phoenix-sources.jar"/>
 	<classpathentry kind="lib" path="C:/Users/open/wpilib/user/java/lib/CTRE_Phoenix.jar"/>
+	<classpathentry kind="var" path="USERLIBS_DIR/CTRE_Phoenix-sources.jar"/>
+	<classpathentry kind="var" path="USERLIBS_DIR/CTRE_Phoenix.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

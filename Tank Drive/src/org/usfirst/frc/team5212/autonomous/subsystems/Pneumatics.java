@@ -10,13 +10,22 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class Pneumatics extends Subsystem {
 	
 	Compressor compressor = new Compressor(RobotMap.compressorPort);
-	DoubleSolenoid solenoid1 = new DoubleSolenoid(RobotMap.solenoidPortOne, RobotMap.solenoidPortTwo);
+	
+	DoubleSolenoid solenoidShooter = new DoubleSolenoid(RobotMap.shooterPortOne, 
+			RobotMap.shooterPortTwo);
+	DoubleSolenoid solenoidClimber = new DoubleSolenoid(RobotMap.climberPortOne, 
+			RobotMap.climberPortTwo);
 
 	@Override
 	protected void initDefaultCommand() {
 		System.out.println("Compressor init");
-		compressor.setClosedLoopControl(true);
+		
+		compressor.start();
+		
 		System.out.println("Compressor in a closed loop - jolly good");
+		
+		solenoidShooter.set(DoubleSolenoid.Value.kReverse);
+		solenoidClimber.set(DoubleSolenoid.Value.kReverse);
 	}
 
 	public void compress() {
@@ -24,19 +33,28 @@ public class Pneumatics extends Subsystem {
 	}
 
 	public void stopCompress() {
+		System.out.print("Stopping compression");
 		compressor.setClosedLoopControl(false);
-		compressor.stop();
 	}
-
+	
 	public void shoot() {
-		solenoid1.set(DoubleSolenoid.Value.kForward);
+		solenoidShooter.set(DoubleSolenoid.Value.kForward);
 	}
 
 	public void reset() {
-		solenoid1.set(DoubleSolenoid.Value.kReverse);
+		solenoidShooter.set(DoubleSolenoid.Value.kReverse);
 	}
 	
 	public void lock() {
-		solenoid1.set(DoubleSolenoid.Value.kOff);
+		solenoidClimber.set(DoubleSolenoid.Value.kOff);
+		solenoidShooter.set(DoubleSolenoid.Value.kOff);
+	}
+	
+	public void climberUp() {
+		solenoidClimber.set(DoubleSolenoid.Value.kForward);
+	}
+	
+	public void climberDown() {
+		solenoidClimber.set(DoubleSolenoid.Value.kReverse);
 	}
 }

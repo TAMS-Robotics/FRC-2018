@@ -2,33 +2,29 @@ package org.usfirst.frc.team5212.robot;
 
 import org.usfirst.frc.team5212.autonomous.subsystems.CubeIO;
 import org.usfirst.frc.team5212.autonomous.subsystems.DriveTrain;
-import org.usfirst.frc.team5212.autonomous.subsystems.PIDDrive;
 import org.usfirst.frc.team5212.autonomous.subsystems.Pneumatics;
+import org.usfirst.frc.team5212.autonomous.subsystems.ShooterArm;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-//import org.usfirst.frc.team5212.autonomous.subsystems.PIDDrive;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.PWMTalonSRX;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Scheduler;
 
 public class Robot extends IterativeRobot {
-	// states
-	boolean compress_state = false;
-	boolean shoot_state = true;
-
+	// classwide objects
+	public static Timer autonomousTimer;
 	public static PowerDistributionPanel panel;
 	public static OI oi;
 
 	// subsystem creations
-	public static PIDDrive piddrive;
-
 	public static DriveTrain drivetrain;
 	public static Pneumatics pneum;
 	public static CubeIO cubeIO; 
+	public static ShooterArm arm;
 
 	NetworkTableInstance inst;
 	NetworkTable visionTable;
@@ -36,72 +32,89 @@ public class Robot extends IterativeRobot {
 	NetworkTableEntry leftRawData;
 	NetworkTableEntry rightRawData;
 	NetworkTableEntry testNT;
-	
-	final int DEFAULT_DRIVE = 0;	
-	
-	// logs the input of the left joystick at the top of every teleopPeriodic
-	double leftInput;
-	// logs the input of the right joystick
-	double rightInput;
 
-	//	public static final PIDDrive PIDDrive = new PIDDrive();
+	double leftInput;
+	double rightInput;
+	double leftAutonomousInput;
+	double rightAutonomousInput;
 
 	public void robotInit() {
-		/*
-		 * take our extra talons and just have them follow the Talons updated in
-		 * arcadeDrive
-		 */
-		// ac = new PrepareShoot();
 		
+		// network table init
 		inst = NetworkTableInstance.getDefault();
 		visionTable = inst.getTable("vision");
-		
 		testNT = visionTable.getEntry("test");
-		
-		if(testNT.getDouble(0.0) == 123.0)
+
+		if (testNT.getDouble(0.0) == 123.0) {
 			System.out.println("NetworkTables is working");
-		else
+		}
+		else {
 			System.out.println("ERROR: NetworkTables is not working");
+		}
 		
+		// machine init
 		panel = new PowerDistributionPanel(RobotMap.pdpPort);
 
-		piddrive = new PIDDrive();
+		// subsystem init
 		drivetrain = new DriveTrain();
 		pneum = new Pneumatics();
-		oi = new OI();
+		cubeIO = new CubeIO();
+		arm = new ShooterArm();
 
 		CameraServer.getInstance().startAutomaticCapture();
+
+		// must init this last because
+		// of dependencies and null pointer
+		oi = new OI();
+
 	}
 
 	public void autonomousInit() {
-		//		if (ac != null) {
-		//			// ac.start();
-		//		}
+		// auton instantiation
+		autonomousTimer = new Timer();
+		autonomousTimer.start();
+
+		leftAutonomousInput = -0.75 * RobotMap.speedL;
+		rightAutonomousInput = -0.75 * RobotMap.speedR;
 	}
 
 	public void autonomousPeriodic() {
-		
+		// drive straight for 1.97 seconds
+		if (autonomousTimer.get() < 1.97) {
+			double[] d = drivetrain.driveStraight(leftAutonomousInput, rightAutonomousInput);
+			drivetrain.slewTankDrive(d[0], d[1], panel.getVoltage());
+		}
+		else {
+			drivetrain.tankDrive(0, 0);
+		}
 	}
 
 	public void teleopInit() {
-		
+
 	}
 
-	/**
-	 * This function is called periodically during operator control
-	 */
 	public void teleopPeriodic() {
-		//		drivetrain.slewTankDrive(OI.j.getRawAxis(1), OI.j.getRawAxis(3), panel.getVoltage());
-
-		leftInput = oi.getLeftJoystick();
-		
-		rightInput = oi.getRightJoystick();
-
 		Scheduler.getInstance().run();
-		System.out.println(drivetrain.leftEncoder.getDistance());
-		drivetrain.slewTankDrive(leftInput, rightInput, panel.getVoltage());
+		
+		// safety protocol during testing
+		// allows operators to disable driving
+		if (RobotMap.DRIVE_TRAIN_ENABLED) {
+			leftInput = oi.getLeftJoystick();
+			rightInput = oi.getRightJoystick();
 
-		//		drive.tankDrive(leftInput, rightInput);
+			if (
+					(leftInput > 0 && rightInput > 0) || 
+					(leftInput < 0 && rightInput < 0)
+				)
+			{
+				// use balanced joystick input and wheel output
+				double[] d = drivetrain.joystickBalance(leftAutonomousInput, rightAutonomousInput);
+				drivetrain.slewTankDrive(d[0], d[1], panel.getVoltage());
+			}
+			else {
+				drivetrain.slewTankDrive(leftInput, rightInput, panel.getVoltage());
+			}
+		}
 	}
 
 }

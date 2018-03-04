@@ -16,6 +16,7 @@ public class Shoot extends Command {
 	}
 	
 	protected void execute() {
+		
 	}
 
 	protected boolean isFinished() {
@@ -23,7 +24,7 @@ public class Shoot extends Command {
 	}
 
 	protected void end() {
-		Robot.pneum.lock();
+//		Robot.pneum.lock();
 	}
 		
 	protected void interrupted() {

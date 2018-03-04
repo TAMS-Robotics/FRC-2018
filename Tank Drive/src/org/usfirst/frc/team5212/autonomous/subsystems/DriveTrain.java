@@ -23,12 +23,11 @@ public class DriveTrain extends PIDSubsystem {
 	public final WPI_TalonSRX leftSlave2 = new WPI_TalonSRX(RobotMap.leftSlave2Port);
 	public final WPI_TalonSRX rightSlave2 = new WPI_TalonSRX(RobotMap.rightSlave2Port);
 
-	int joystickSwap;
-
-	DifferentialDrive drive = new DifferentialDrive(frontLeftMotor, frontRightMotor);
 
 	public final Encoder leftEncoder = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
 	public final Encoder rightEncoder = new Encoder(2, 3, false, Encoder.EncodingType.k4X);
+
+	DifferentialDrive drive = new DifferentialDrive(frontLeftMotor, frontRightMotor);
 
 	// keeps track of the time
 	Timer timer;
@@ -68,8 +67,8 @@ public class DriveTrain extends PIDSubsystem {
 	public DriveTrain() {
 		super("DriveTrain", RobotMap.driveMotorKp, RobotMap.driveMotorKi, RobotMap.driveMotorKd);
 
-		//		frontLeftMotor.setInverted(false);
-		//		frontRightMotor.setInverted(false);
+		//	frontLeftMotor.setInverted(false);
+		//	frontRightMotor.setInverted(false);
 
 		leftSlave1.follow(frontLeftMotor);
 		rightSlave1.follow(frontRightMotor);
@@ -125,7 +124,7 @@ public class DriveTrain extends PIDSubsystem {
 
 	public void reverseOrientaion() {
 		// temp-based swap
-		joystickSwap = RobotMap.leftJoystickPort;
+		int joystickSwap = RobotMap.leftJoystickPort;
 		RobotMap.leftJoystickPort = RobotMap.rightJoystickPort;
 		RobotMap.rightJoystickPort = joystickSwap;
 
@@ -160,7 +159,7 @@ public class DriveTrain extends PIDSubsystem {
 	}
 
 	public void tankDrive(double leftInput, double rightInput) {
-		drive.tankDrive(leftInput, rightInput);
+		drive.tankDrive(-1*leftInput, -1*rightInput);
 	}
 
 	public void slewTankDrive(double leftInput, 
@@ -207,7 +206,7 @@ public class DriveTrain extends PIDSubsystem {
 				// currently using a linear function
 				functionOutput = leftJumpDirection * 
 						jumpThreshold * 
-						((timer.get() - leftJumpTime) + .5) * 
+						(timer.get() - leftJumpTime) + .5 * 
 						leftJumpDirection;
 
 				/* Does this code not do the same thing regardless of 
@@ -238,57 +237,57 @@ public class DriveTrain extends PIDSubsystem {
 
 		}
 
-	// Checks for input jumps that increase the output power of the motor and limit them to a linear function
-	if (rightInputJump || 
-			(
-					((Math.abs(rightInputHistory.element() - rightInput)) > jumpThreshold) && 
-					(Math.abs(rightInput) > .5)
-					)
-			) 
-	{
-		if (!rightInputJump) {
-			// notify that there has been a jump
-			rightInputJump = true;
+		// Checks for input jumps that increase the output power of the motor and limit them to a linear function
+		if (rightInputJump || 
+				(
+						((Math.abs(rightInputHistory.element() - rightInput)) > jumpThreshold) && 
+						(Math.abs(rightInput) > .5)
+						)
+				) 
+		{
+			if (!rightInputJump) {
+				// notify that there has been a jump
+				rightInputJump = true;
 
-			// log the jump time
-			rightJumpTime = timer.get();
-			rightPrevious = rightInputHistory.element();
+				// log the jump time
+				rightJumpTime = timer.get();
+				rightPrevious = rightInputHistory.element();
 
-			// log which direction the jump was
-			rightJumpDirection = ((rightInputHistory.element() - rightInput) > 0) ? -1 : 1;
-		}
+				// log which direction the jump was
+				rightJumpDirection = ((rightInputHistory.element() - rightInput) > 0) ? -1 : 1;
+			}
 
-		// If there was a jump noticed, use a linear function to 
-		if (rightInputJump) {
-			// currently using a linear function
-			functionOutput = rightJumpDirection * 
-					jumpThreshold * 
-					((timer.get() - rightJumpTime) + .5) * 
-					rightJumpDirection;
+			// If there was a jump noticed, use a linear function to 
+			if (rightInputJump) {
+				// currently using a linear function
+				functionOutput = rightJumpDirection * 
+						jumpThreshold * 
+						(timer.get() - rightJumpTime) + .5 * 
+						rightJumpDirection;
 
-			if (rightJumpDirection == 1) {
-				if (functionOutput < rightInput) {
-					// REMOVE WHEN FINISHED DEBUGGING
-					//						System.out.println(functionOutput);
-					rightInput = functionOutput;
+				if (rightJumpDirection == 1) {
+					if (functionOutput < rightInput) {
+						// REMOVE WHEN FINISHED DEBUGGING
+						//						System.out.println(functionOutput);
+						rightInput = functionOutput;
+					}
+					else {
+						rightInputJump = false;
+					}
 				}
 				else {
-					rightInputJump = false;
+					if(functionOutput > rightInput) {
+						// REMOVE WHEN FINISHED DEBUGGING
+						//						System.out.println(functionOutput);
+						rightInput = functionOutput;
+					}
+					else {
+						rightInputJump = false;
+					}
 				}
 			}
-			else {
-				if(functionOutput > rightInput) {
-					// REMOVE WHEN FINISHED DEBUGGING
-					//						System.out.println(functionOutput);
-					rightInput = functionOutput;
-				}
-				else {
-					rightInputJump = false;
-				}
-			}
-		}
 
-	}
+		}
 
 		//Need to add a sloping function and handle both sides of robot
 
@@ -301,11 +300,79 @@ public class DriveTrain extends PIDSubsystem {
 		double rightDriveValue = (-1 * (RobotMap.speedR) * rightInput);
 
 		if (panelVoltage >= RobotMap.voltageDropThreshold) {
+			//			System.out.println(leftDriveValue+" "+rightDriveValue);
 			drive.tankDrive(leftDriveValue, rightDriveValue);
 
 		}
 		else {
+			//			System.out.println(leftDriveValue+" "+rightDriveValue);
+
 			drive.tankDrive(0.25 * leftDriveValue, 0.25  * rightDriveValue);
 		}
 	}
+
+
+	public double[] joystickBalance(double leftInput, double rightInput) {
+
+		// calculate L:R ratios of joystick and wheels 
+		double joystickRatio = leftInput / rightInput;
+		double speedRatio = leftEncoder.getRate() / rightEncoder.getRate();
+
+		// get the difference between ratios and calculate sigmoid value for adjustment
+		double joystickWheelRatioDifferential = joystickRatio - speedRatio;
+		double sigmoidJoystickWheelRatioDifferential = sigmoid(joystickWheelRatioDifferential);
+
+		double leftOutput, rightOutput;
+
+		// adjust motor values by sigmoid difference 
+		// joysticks are ahead of the wheels
+		leftOutput = leftInput + (sigmoidJoystickWheelRatioDifferential / 2); 
+		rightOutput = rightInput - (sigmoidJoystickWheelRatioDifferential / 2);
+
+		// scale down powers by the larger one greater than 1, if it exists
+		if (leftOutput > 1) {
+			leftOutput /= leftOutput;
+			rightOutput /= leftOutput;
+		}
+		else if (rightOutput > 1) {
+			rightOutput /= rightOutput;
+			leftOutput /= rightOutput;
+		}
+
+		double[] returnable = {leftOutput, rightOutput};
+
+		return returnable;
+
+	}
+
+
+	public double[] driveStraight(double leftInput, double rightInput) {
+		double leftRightDiff = leftEncoder.getRate() - rightEncoder.getRate();
+		double sigDiff = sigmoid(leftRightDiff);
+
+		double rightOutput = rightInput + sigDiff;
+		double leftOutput = leftInput - sigDiff;
+
+		// scale down powers by the larger one greater than 1, if it exists
+		if (leftOutput > 1) {
+			leftOutput /= leftOutput;
+			rightOutput /= leftOutput;
+		}
+		else if (rightOutput > 1) {
+			rightOutput /= rightOutput;
+			leftOutput /= rightOutput;
+		}
+
+		double[] returnable = {leftOutput, rightOutput};
+
+		return returnable;
+	}
+
+
+	// 1 / (1 + Math.exp(-x))
+	private double sigmoid(double x) {
+		return 1 / (1 + Math.exp(-x));
+	}
+
+
 }
