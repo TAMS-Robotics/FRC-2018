@@ -17,13 +17,13 @@ focal_length = 0
 center = 0
 camera_matrix = np.array()
 
-print "Camera Matrix :\n {0}".format(camera_matrix);
+print("Camera Matrix :\n {0}".format(camera_matrix))
 
 dist_coeffs = np.zeros((4,1))
 (success, rvecs, tvecs) = cv2.solvePnP(model_points, image_points, camera_matrix, dist_coeffs, flags=cv2.CV_ITERATIVE)
 
-print "Rotation Vector:\n {0}".format(rotation_vector)
-print "Translation Vector:\n {0}".format(translation_vector)
+print("Rotation Vector:\n {0}".format(rotation_vector))
+print("Translation Vector:\n {0}".format(translation_vector))
 
 R, _ = cv2.Rodrigues(rvecs)
 side_y = math.sqrt(R[0, 0] * R[0, 0] + R[1, 0] * R[1, 0])
