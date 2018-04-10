@@ -17,6 +17,9 @@ vision_table = NetworkTables.getTable('vision')
 logging.basicConfig(filename = 'vision.log', level = logging.DEBUG, format = '%(asctime)s %(message)s')
 signal.signal(signal.SIGSEGV, sig_handler)
 
+greenLower = np.array([40, 100, 100])
+greenUpper = np.array([90, 255, 255])
+
 res_x, res_y = 1920, 1080
 diagonal_fov = 75.2
 target_height = 9.375
@@ -76,7 +79,7 @@ def find_optimal_contoured_centroid(mask):
         center = (cx, cy)
 
         logging.info("Contours: %s", str.format(ordered_cnts))
-        
+
         return center
 
 def find_contoured_centroid(mask):
@@ -96,10 +99,10 @@ def find_contoured_centroid(mask):
         center = ((center1[0] + center2[0]) / 2, (center1[1] + center2[1]) / 2)
 
         logging.info("Contours: %s", str.format(ordered_cnts))
-        
+
         return center
 
-# TODO: implement target cost algorithm 
+# TODO: implement target cost algorithm
 def find_optimal_contours(contours):
     best_contours = None
     for p1, p2 in combinations(contours, 2):
@@ -173,4 +176,3 @@ with pyrs.Service() as serv:
             vision.putNumber('distance', distance)
 
             time.sleep(2.9)
-
