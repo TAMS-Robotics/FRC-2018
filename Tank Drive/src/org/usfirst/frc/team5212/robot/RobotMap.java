@@ -33,9 +33,9 @@ package org.usfirst.frc.team5212.robot;
 
 public class RobotMap {
 	// project wide states - safety purposes
-	public static final boolean DRIVE_TRAIN_ENABLED = false;
-	public static final boolean CLIMBER_ENABLED = false;
-	public static final boolean SHOOTER_ENABLED = false;
+	public static final boolean DRIVE_TRAIN_ENABLED = true;
+	public static final boolean CLIMBER_ENABLED = true;
+	public static final boolean SHOOTER_ENABLED = true;
 	
 	// machine ports
 	public static final int compressorPort = 0;
@@ -46,9 +46,14 @@ public class RobotMap {
 	// dont make this final amogh u idiot
 	public static int leftJoystickPort = 1;
 	public static int rightJoystickPort = 3;
+	public static double gyroKp = 0.4;
+	
+	// field constants
+	public static final double AUTONOMOUS_DISTANCE = 3;
 	
 	/* DriveTrain subsystem*/
 	// ports
+	
 	public static final int frontLeftPort = 2;
 	public static final int frontRightPort = 7;
 	public static final int leftSlave1Port = 3;
@@ -58,23 +63,28 @@ public class RobotMap {
 	
 	// constants
 	public static final double voltageDropThreshold = 8.0;
-	public static final double speedR = 1.;
-	public static final double speedL = 1.;
+	public static final double speedR = 1;
+	public static final double speedL = 1;
 	
 	
 	/* Pneumatics subsystem */
 	// ports
-	public static final int shooterPortOne = 6;
-	public static final int shooterPortSingle = 7;
-	public static final int shooterPortTwo = 1;
+	public static final int shooterPortOne = 1;
+//	public static final int shooterPortSingle = 7;
+	public static final int shooterPortTwo = 7;
 	public static final int climberPortOne = 2;
-	public static final int climberPortTwo = 3;
-	
+	public static final int climberPortTwo = 3; 
     
 	/* ShooterArm subsystem */
 	// ports
-	public static final int leftShooterArm = 6;
-	public static final int rightShooterArm = 5;
+	public static final int leftShooterArm = 5;
+	public static final int rightShooterArm = 6;
+//	public static final int relativeFloorToScalePostion = 242;
+//	public static final int relativeFloorToSwitchPostion = 192;
+	public static final int raisedPosition = 295;
+	public static final int armHeightMax = 300;
+	public static final int port = 0;
+	public static final int shooterArmTimeout = 10;
 	
 	/* CubeIO Subsystem */
 	// ports
@@ -82,11 +92,11 @@ public class RobotMap {
 	public static final int ioRightArmPort = 1;  
 	
 	// constants
-	public static final int leftArmIntakeSpeed = -1;
-	public static final int rightArmIntakeSpeed = 1;
+	public static final double leftArmIntakeSpeed = -.85;
+	public static final double rightArmIntakeSpeed = .85;
 	
-	public static final int leftArmOutputSpeed = 1;
-	public static final int rightArmOutputSpeed = -1;
+	public static final double leftArmOutputSpeed = 1;
+	public static final double rightArmOutputSpeed = -1;
 	
 	// buttons
 	public static final int xButton = 1;
@@ -117,9 +127,10 @@ public class RobotMap {
 	public static final double shooterKd = 0.3;	
 	
 	// arms motors
-	public static final double  armMotorKp = 0.4;
-	public static final double  armMotorKi = 0.0;
-	public static final double  armMotorKd = 0.0;
+	public static final double armMotorKp = 1.0; // .8, .4, .6 
+	public static final double armMotorKi = 0.1;
+	public static final double armMotorKd = 1.0; // .6, .35, .2, .1, .03
+	public static final double feedForward = 0.8;
 	
 	// miscellaneous constants
 	public static final double distancePerPulse = Math.PI * 6 / 12 / 2048;

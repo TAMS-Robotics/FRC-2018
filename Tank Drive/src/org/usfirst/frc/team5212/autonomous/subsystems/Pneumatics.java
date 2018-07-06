@@ -23,8 +23,7 @@ public class Pneumatics extends Subsystem {
 		compressor.start();
 		
 		System.out.println("Compressor in a closed loop - jolly good");
-		
-		solenoidShooter.set(DoubleSolenoid.Value.kReverse);
+		solenoidShooter.set(DoubleSolenoid.Value.kForward);
 		solenoidClimber.set(DoubleSolenoid.Value.kReverse);
 	}
 

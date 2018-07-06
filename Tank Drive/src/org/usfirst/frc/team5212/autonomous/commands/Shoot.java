@@ -12,11 +12,10 @@ public class Shoot extends Command {
 	}
 	
 	protected void initialize() {
-		Robot.pneum.shoot();
 	}
 	
 	protected void execute() {
-		
+		Robot.pneum.shoot();
 	}
 
 	protected boolean isFinished() {

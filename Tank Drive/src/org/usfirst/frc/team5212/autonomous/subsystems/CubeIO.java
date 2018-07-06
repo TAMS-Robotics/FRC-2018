@@ -6,8 +6,10 @@ import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class CubeIO extends Subsystem {
-	Spark leftArm = new Spark(0);
-	Spark rightArm = new Spark(1);
+	public Spark leftBackArm = new Spark(1);
+	public Spark rightBackArm = new Spark(0);
+	public Spark leftFrontArm = new Spark(3);
+	public Spark rightFrontArm = new Spark(2);
 	
 	public CubeIO() {
 		super("CubeIO"); 
@@ -18,17 +20,23 @@ public class CubeIO extends Subsystem {
 	}
 	
 	public void in() {
-		leftArm.setSpeed(RobotMap.leftArmIntakeSpeed);
-		rightArm.setSpeed(RobotMap.rightArmIntakeSpeed);
+		leftBackArm.setSpeed(RobotMap.leftArmIntakeSpeed);
+		rightBackArm.setSpeed(RobotMap.rightArmIntakeSpeed);
+		leftFrontArm.setSpeed(RobotMap.leftArmIntakeSpeed);
+		rightFrontArm.setSpeed(RobotMap.rightArmIntakeSpeed);
 	}
 	
 	public void out() {
-		leftArm.setSpeed(RobotMap.leftArmOutputSpeed);
-		rightArm.setSpeed(RobotMap.rightArmOutputSpeed);
+		leftBackArm.setSpeed(RobotMap.leftArmOutputSpeed);
+		rightBackArm.setSpeed(RobotMap.rightArmOutputSpeed);
+		leftFrontArm.setSpeed(RobotMap.leftArmOutputSpeed);
+		rightFrontArm.setSpeed(RobotMap.rightArmOutputSpeed);	
 	}
 	
 	public void stop() {
-		leftArm.setSpeed(0);
-		rightArm.setSpeed(0);
+		leftBackArm.setSpeed(0);
+		rightBackArm.setSpeed(0);
+		leftFrontArm.setSpeed(0);
+		rightFrontArm.setSpeed(0);
 	}
 }

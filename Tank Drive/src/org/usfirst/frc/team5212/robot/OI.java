@@ -7,8 +7,6 @@
 
 package org.usfirst.frc.team5212.robot;
 
-import org.usfirst.frc.team5212.autonomous.commands.ArmDown;
-import org.usfirst.frc.team5212.autonomous.commands.ArmUp;
 import org.usfirst.frc.team5212.autonomous.commands.ClimberDown;
 import org.usfirst.frc.team5212.autonomous.commands.ClimberUp;
 import org.usfirst.frc.team5212.autonomous.commands.Intake;
@@ -16,6 +14,8 @@ import org.usfirst.frc.team5212.autonomous.commands.Reset;
 import org.usfirst.frc.team5212.autonomous.commands.ReverseOrientation;
 import org.usfirst.frc.team5212.autonomous.commands.Shoot;
 import org.usfirst.frc.team5212.autonomous.commands.ShootAndOutput;
+import org.usfirst.frc.team5212.autonomous.commands.ToggleArmRaise;
+import org.usfirst.frc.team5212.autonomous.commands.Yeet;
 
 //import org.usfirst.frc.team5212.autonomous.commands.Intake;
 //import org.usfirst.frc.team5212.autonomous.commands.PrepareShoot;
@@ -43,16 +43,28 @@ public class OI {
 	private Button lb = new JoystickButton(j, RobotMap.lbButton);
 	private Button lt = new JoystickButton(j, RobotMap.ltButton);
 	
+	
+	
 	public OI() {
 		start.whenPressed(new ReverseOrientation());
-		a.whenPressed(new ClimberDown());
-		y.whenPressed(new ClimberUp());
-		x.whenPressed(new Reset());
-		b.whenPressed(new Shoot());
-		rb.whileHeld(new Intake());
-		rt.whileHeld(new ShootAndOutput());
-		lb.whileHeld(new ArmUp());
-		lt.whileHeld(new ArmDown());
+		if(RobotMap.CLIMBER_ENABLED) {
+			a.whenPressed(new ClimberDown());
+			y.whenPressed(new ClimberUp());
+			rb.whileHeld(new Yeet());
+		}
+		
+		if(RobotMap.SHOOTER_ENABLED) {
+			x.whenPressed(new Reset());
+			b.whenPressed(new Shoot());
+			lt.whileHeld(new Intake());
+			rt.whileHeld(new ShootAndOutput());
+						
+		}
+		
+		lb.whenPressed(new ToggleArmRaise());
+//		lb.whileActive(new ArmContinuousLift());
+//		rb.whenPressed(new ArmDown());
+//		rb.whileActive(new ArmContinuousLower());
 	}
 
 	public Button getStart() {

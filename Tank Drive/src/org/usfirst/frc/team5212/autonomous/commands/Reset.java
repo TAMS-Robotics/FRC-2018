@@ -12,10 +12,10 @@ public class Reset extends Command {
     }
 
     protected void initialize() {
-    	Robot.pneum.reset();
     }
 
     protected void execute() {
+    	Robot.pneum.reset();
     }
 
     protected boolean isFinished() {

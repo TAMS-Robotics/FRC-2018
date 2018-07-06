@@ -12,6 +12,7 @@ public class ClimberDown extends Command {
 	}
 	
 	protected void initialize() {
+		
 	}
 	
 	protected void execute() {

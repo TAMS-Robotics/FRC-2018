@@ -9,7 +9,9 @@ import org.usfirst.frc.team5212.robot.RobotMap;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.GyroBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -23,12 +25,19 @@ public class DriveTrain extends PIDSubsystem {
 	public final WPI_TalonSRX leftSlave2 = new WPI_TalonSRX(RobotMap.leftSlave2Port);
 	public final WPI_TalonSRX rightSlave2 = new WPI_TalonSRX(RobotMap.rightSlave2Port);
 
-
 	public final Encoder leftEncoder = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
 	public final Encoder rightEncoder = new Encoder(2, 3, false, Encoder.EncodingType.k4X);
 
+	
+	public final GyroBase gyro = new AnalogGyro(0);
+	
+	
 	DifferentialDrive drive = new DifferentialDrive(frontLeftMotor, frontRightMotor);
 
+	// 
+	double rotation;
+	double fwd;
+	
 	// keeps track of the time
 	Timer timer;
 
@@ -105,6 +114,7 @@ public class DriveTrain extends PIDSubsystem {
 
 		leftEncoder.reset();
 		rightEncoder.reset();
+		
 	}
 
 	@Override
@@ -121,7 +131,26 @@ public class DriveTrain extends PIDSubsystem {
 		Robot.drivetrain.frontRightMotor.pidWrite(output); // this is where the computed output value from the PIDController is applied to the motor
 	}
 
-
+	
+//	private boolean rotateTo(double angle) {
+//		double angleDifference = gyro.getAngle() - angle;
+//		double threshold = 3;
+//		
+//		if (angleDifference > threshold) {
+//			rotation = angleDifference * RobotMap.gyroKp;
+//			return false;
+//		}
+//		else {
+//			rotation = 0; 
+//			return true;
+//		}
+//	}
+//	
+//	private void moveTo(double f, double r) {
+//		fwd = f;
+//		rotation = r;
+//	}
+//	
 	public void reverseOrientaion() {
 		// temp-based swap
 		int joystickSwap = RobotMap.leftJoystickPort;
@@ -162,6 +191,12 @@ public class DriveTrain extends PIDSubsystem {
 		drive.tankDrive(-1*leftInput, -1*rightInput);
 	}
 
+//	public void gyroDrive(double leftInput, double rightInput) {
+//		if (gyro.getAngle() < 0)
+//		slewTankDrive(leftInput, rightInput, Robot.panel.getVoltage());
+//		rotation = 0;
+//	}
+	
 	public void slewTankDrive(double leftInput, 
 			double rightInput, 
 			double panelVoltage) {
@@ -311,16 +346,28 @@ public class DriveTrain extends PIDSubsystem {
 		}
 	}
 
+	public double[] autonomousJoystickBalance(double leftInput, double rightInput) {
 
-	public double[] joystickBalance(double leftInput, double rightInput) {
-
-		// calculate L:R ratios of joystick and wheels 
+		leftEncoder.reset();
+		rightEncoder.reset();
+		
+		// calculate L:R ratios of joystick(so in auton, this is pure raw numbers) and wheels 
 		double joystickRatio = leftInput / rightInput;
-		double speedRatio = leftEncoder.getRate() / rightEncoder.getRate();
+		System.out.println("Input ratio: " + joystickRatio);
+		
+		if (leftEncoder.getDistance() == 0 || rightEncoder.getDistance() == 0 ) {
+			double d[] = {leftInput, rightInput};
+			return d;
+		}
+		double speedRatio = leftEncoder.getDistance() / rightEncoder.getDistance();
+		
+		System.out.println("Distance ratio: " + speedRatio);
 
 		// get the difference between ratios and calculate sigmoid value for adjustment
 		double joystickWheelRatioDifferential = joystickRatio - speedRatio;
+		System.out.println("Joystick wheel differential: " + joystickWheelRatioDifferential);
 		double sigmoidJoystickWheelRatioDifferential = sigmoid(joystickWheelRatioDifferential);
+		System.out.println("Sigmoid: " + sigmoidJoystickWheelRatioDifferential);
 
 		double leftOutput, rightOutput;
 
@@ -328,6 +375,8 @@ public class DriveTrain extends PIDSubsystem {
 		// joysticks are ahead of the wheels
 		leftOutput = leftInput + (sigmoidJoystickWheelRatioDifferential / 2); 
 		rightOutput = rightInput - (sigmoidJoystickWheelRatioDifferential / 2);
+		System.out.println("Left output: " + leftOutput);
+		System.out.println("Right output: " + rightOutput);
 
 		// scale down powers by the larger one greater than 1, if it exists
 		if (leftOutput > 1) {
@@ -340,11 +389,65 @@ public class DriveTrain extends PIDSubsystem {
 		}
 
 		double[] returnable = {leftOutput, rightOutput};
+		System.out.println("Returned left output: "
+				+ leftOutput);
+		System.out.println("Returned right output" + rightOutput);
 
 		return returnable;
 
 	}
+	
+	// teleop mode
+	public double[] joystickBalance(double leftInput, double rightInput) {
 
+		// calculate L:R ratios of joystick and wheels 
+		double joystickRatio = leftInput / rightInput;
+		System.out.println("Joystick ratio: " + joystickRatio);
+		
+		System.out.println("rate_L: " + leftEncoder.getRate() + " rate_R: " + rightEncoder.getRate());
+		
+		if (leftEncoder.getRate() == 0 || rightEncoder.getRate() == 0 ) {
+			double d[] = {leftInput, rightInput};
+			return d;
+		}
+		
+		double speedRatio = leftEncoder.getRate() / rightEncoder.getRate();
+		
+		System.out.println("Speed ratio: " + speedRatio);
+
+		// get the difference between ratios and calculate sigmoid value for adjustment
+		double joystickWheelRatioDifferential = joystickRatio - speedRatio;
+		System.out.println("Joystick wheel differential: " + joystickWheelRatioDifferential);
+		double sigmoidJoystickWheelRatioDifferential = sigmoid(joystickWheelRatioDifferential);
+		System.out.println("Sigmoid: " + sigmoidJoystickWheelRatioDifferential);
+
+		double leftOutput, rightOutput;
+
+		// adjust motor values by sigmoid difference 
+		// joysticks are ahead of the wheels
+		leftOutput = leftInput + (sigmoidJoystickWheelRatioDifferential / 2); 
+		rightOutput = rightInput - (sigmoidJoystickWheelRatioDifferential / 2);
+		System.out.println("Left output: " + leftOutput);
+		System.out.println("Right output: " + rightOutput);
+
+		// scale down powers by the larger one greater than 1, if it exists
+		if (leftOutput > 1) {
+			leftOutput /= leftOutput;
+			rightOutput /= leftOutput;
+		}
+		else if (rightOutput > 1) {
+			rightOutput /= rightOutput;
+			leftOutput /= rightOutput;
+		}
+
+		double[] returnable = {leftOutput, rightOutput};
+		System.out.println("Returned left output: "
+				+ leftOutput);
+		System.out.println("Returned right output" + rightOutput);
+
+		return returnable;
+
+	}
 
 	public double[] driveStraight(double leftInput, double rightInput) {
 		double leftRightDiff = leftEncoder.getRate() - rightEncoder.getRate();
@@ -367,7 +470,6 @@ public class DriveTrain extends PIDSubsystem {
 
 		return returnable;
 	}
-
 
 	// 1 / (1 + Math.exp(-x))
 	private double sigmoid(double x) {
